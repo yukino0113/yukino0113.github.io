@@ -16,9 +16,9 @@ Css Indexing
 Base CSS
 ============================================*/
 *{
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 h1,
 h2,
@@ -30,109 +30,109 @@ h6 {
 
 }
 html {
-    height: 100%;
+  height: 100%;
 }
 body {
-    height: 100%;
-    font-family: 'Quicksand', sans-serif;
-    color: rgba(0, 0, 0, 0.6);
-    box-sizing: border-box;
-    font-size: 14px;
-    overflow: hidden;
-    background: #fafafa;
+  height: 100%;
+  font-family: 'Quicksand', sans-serif;
+ color: rgba(0, 0, 0, 0.6);
+  box-sizing: border-box;
+  font-size: 14px;
+  overflow: hidden;
+  background: #fafafa;
 }
 label {
-    padding: 0;
-    margin: 0;
+  padding: 0;
+  margin: 0;
 }
 ul, li, ol {
-    padding: 0;
-    margin: 0;
+  padding: 0;
+  margin: 0;
 }
 li{
-    list-style: none;
+  list-style: none;
 }
 a, img {
-    border: 0;
-    outline: none;
-    text-decoration: none;
+  border: 0;
+  outline: none;
+  text-decoration: none;
 }
 input::-moz-focus-inner {
-    border: 0;
+  border: 0;
 }
 bo {
-    outline: none;
+  outline: none;
 }
 img {
-    max-width: 100%;
-    height: auto;
-    vertical-align: bottom;
+  max-width: 100%;
+  height: auto;
+  vertical-align: bottom;
 }
 input, select, textarea, button{
-    font-family: 'Muli', sans-serif;
+  font-family: 'Muli', sans-serif;
 }
 input:focus, select:focus, textarea:focus, button:focus{
-    outline: 0;
+  outline: 0;
 }
 
 a {
-    color: inherit;
-    -webkit-transition: 0.5s;
-    -o-transition: 0.5s;
-    transition: 0.5s; }
+  color: inherit;
+  -webkit-transition: 0.5s;
+  -o-transition: 0.5s;
+  transition: 0.5s; }
 
 
 p {
-    margin-bottom: 1.5em; }
+  margin-bottom: 1.5em; }
 
 h1, h2, h3, h4, h5, h6 {
-    color: #000;
-    font-family: "Quicksand", Arial, sans-serif;
-    font-weight: 400;
-    margin: 0 0 30px 0; }
+  color: #000;
+  font-family: "Quicksand", Arial, sans-serif;
+  font-weight: 400;
+  margin: 0 0 30px 0; }
 
 
 i.material-icons {
-    font-size: inherit;
-    line-height: inherit;
+  font-size: inherit;
+  line-height: inherit;
 }
 ::-webkit-scrollbar-track
 {
-    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
-    background-color: #F5F5F5;
+  -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+  background-color: #F5F5F5;
 }
 
 ::-webkit-scrollbar
 {
-    width: 5px;
-    height: 5px;
-    background-color: #F5F5F5;
+  width: 5px;
+  height: 5px;
+  background-color: #F5F5F5;
 }
 
 ::-webkit-scrollbar-thumb
 {
 
-    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
-    background-color: #777;
+  -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+  background-color: #777;
 }
 
 /*===========================================
 Text Styles CSS
 ============================================*/
 .t-title-size{
-    font-size: 18px;
+  font-size: 18px;
 }
 .t-bold{
-    font-weight: 600;
+  font-weight: 600;
 }
 .t-normal{
-    font-weight: normal;
+  font-weight: normal;
 }
 .t-center{
-    text-align: center;
+  text-align: center;
 }
 .t-right{
-    text-align: right;
+  text-align: right;
 }
 
 
@@ -141,126 +141,126 @@ Text Styles CSS
 Padding & Margins CSS
 ============================================*/
 .p-5{
-    padding: 5px;
+  padding: 5px;
 }
 .p-10{
-    padding: 10px;
+  padding: 10px;
 }
 .p-15{
-    padding: 15px;
+  padding: 15px;
 }
 .p-20{
-    padding: 20px;
+  padding: 20px;
 }
 .p-25{
-    padding: 25px;
+  padding: 25px;
 }
 .p-30{
-    padding: 30px;
+  padding: 30px;
 }
 .p-35{
-    padding: 35px;
+  padding: 35px;
 }
 .p-40{
-    padding: 40px;
+  padding: 40px;
 }
 .p-45{
-    padding: 45px;
+  padding: 45px;
 }
 .p-50{
-    padding: 50px;
+  padding: 50px;
 }
 
 .p-right5{
-    padding-right: 5px;
+  padding-right: 5px;
 }
 .p-right10{
-    padding-right: 10px;
+  padding-right: 10px;
 }
 .p-right15{
-    padding-right: 15px;
+  padding-right: 15px;
 }
 .p-right20{
-    padding-right: 20px;
+  padding-right: 20px;
 }
 .p-right25{
-    padding-right: 25px;
+  padding-right: 25px;
 }
 .p-right30{
-    padding-right: 30px;
+  padding-right: 30px;
 }
 
 .p-left5{
-    padding-left: 5px;
+  padding-left: 5px;
 }
 .p-left10{
-    padding-left: 10px;
+  padding-left: 10px;
 }
 .p-left15{
-    padding-left: 15px;
+  padding-left: 15px;
 }
 .p-left20{
-    padding-left: 20px;
+  padding-left: 20px;
 }
 .p-left25{
-    padding-left: 25px;
+  padding-left: 25px;
 }
 .p-left30{
-    padding-left: 30px;
+  padding-left: 30px;
 }
 
 .m-5{
-    margin: 5px;
+  margin:: 5px;
 }
 .m-10{
-    margin: 10px;
+  margin: 10px;
 }
 .m-15{
-    margin: 15px;
+  margin: 15px;
 }
 .m-20{
-    margin: 20px;
+  margin: 20px;
 }
 .m-25{
-    margin: 25px;
+  margin: 25px;
 }
 .m-30{
-    margin: 30px;
+  margin: 30px;
 }
 .m-35{
-    margin: 35px;
+  margin: 35px;
 }
 .m-40{
-    margin: 40px;
+  margin: 40px;
 }
 .m-45{
-    margin: 45px;
+  margin: 45px;
 }
 .m-50{
-    margin: 50px;
+  margin: 50px;
 }
 
 /*===========================================
 Display Styles
 ============================================*/
 .d-flex{
-    display: flex;
+  display: flex;
 }
 .d-flex-align-center{
-    display: flex;
-    align-items: center;
-    flex-direction: row;
+  display: flex;
+  align-items: center;
+  flex-direction: row;
 }
 .d-flex-align-center-column{
-    display: flex;
-    align-items: center;
-    flex-direction: column;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
 }
 .flex-1{
-    flex: 1;
+  flex: 1;
 }
 .flex-2{
-    flex: 2;
+  flex: 2;
 }
 
 
@@ -401,7 +401,7 @@ Page Styles
 }
 
 .foot-contact {
-    margin: 5px 0px;
+   margin: 5px 0px;
 }
 
 
@@ -413,8 +413,8 @@ Page Styles
 
 
 .social-icons ul li a:hover {
-    color: #000;
-    transform: scale(1.2) translateY(-5px);
+  color: #000;
+  transform: scale(1.2) translateY(-5px);
 }
 .user-profile {
     padding-left: 50px;
@@ -448,13 +448,13 @@ Page Styles
 }
 
 .text {
-
+   
     font-size: 15px;
 }
 
 .pr-list {
     margin: 30px 0px;
-
+    
 }
 
 .pr-list ul li {
@@ -472,7 +472,7 @@ Page Styles
     padding: 5px 10px;
     font-size: 22px;
     transition: all .3s;
-    display: flex;
+        display: flex;
 }
 
 .social-icons-head {}
