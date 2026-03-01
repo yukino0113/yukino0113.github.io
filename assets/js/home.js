@@ -1,4 +1,4 @@
-import { getConfig, validateConfig } from "/assets/js/app-config.js";
+import { getConfig, validateConfig } from "./app-config.js";
 
 const config = getConfig();
 const PASSWORD_KEY = "WEDDING_ACCESS_PASSWORD";

@@ -1,31 +1,23 @@
-import { getConfig, validateConfig } from "/assets/js/app-config.js";
-import { createRsvp } from "/assets/js/api.js";
+import { getConfig, validateConfig } from "./app-config.js";
+import { createRsvp } from "./api.js";
 
 const config = getConfig();
+const PASSWORD_KEY = "WEDDING_ACCESS_PASSWORD";
 
 const form = document.getElementById("rsvp-form");
 const submitStatus = document.getElementById("submit-status");
-const authStatus = document.getElementById("auth-status");
-const passwordInput = document.getElementById("access-password");
 
-document.getElementById("footer-version").textContent = config.VERSION || "v1.2.0";
+document.getElementById("footer-version").textContent = config.VERSION || "v1.2.1";
 
 const configErrors = validateConfig();
 if (configErrors.length) {
   setStatus(submitStatus, configErrors.join("；"), true);
 }
 
-passwordInput.addEventListener("input", () => {
-  if (String(passwordInput.value || "").trim()) {
-    authStatus.textContent = "已輸入密碼，送出時會驗證";
-  } else {
-    authStatus.textContent = "尚未輸入密碼";
-  }
-});
+enforceAccessGate();
 
 document.getElementById("reset-form").addEventListener("click", () => {
   form.reset();
-  authStatus.textContent = "尚未輸入密碼";
   setStatus(submitStatus, "表單已重設", false);
 });
 
@@ -33,9 +25,9 @@ form.addEventListener("submit", async (event) => {
   event.preventDefault();
 
   try {
-    const accessPassword = String(passwordInput.value || "").trim();
-    if (!accessPassword) {
-      throw new Error("請輸入入場密碼");
+    const accessPassword = String(sessionStorage.getItem(PASSWORD_KEY) || "").trim();
+    if (!accessPassword || accessPassword !== config.WEDDING_ACCESS_PASSWORD) {
+      throw new Error("請先回首頁輸入正確入場密碼");
     }
 
     const payload = buildPayloadFromForm();
@@ -43,19 +35,38 @@ form.addEventListener("submit", async (event) => {
 
     setStatus(submitStatus, result.message || "送出成功", false);
     form.reset();
-    authStatus.textContent = "尚未輸入密碼";
   } catch (error) {
     setStatus(submitStatus, error.message, true);
   }
 });
 
+function enforceAccessGate() {
+  const accessPassword = String(sessionStorage.getItem(PASSWORD_KEY) || "").trim();
+  const valid = accessPassword && accessPassword === config.WEDDING_ACCESS_PASSWORD;
+
+  if (valid) {
+    setFormDisabled(false);
+    return;
+  }
+
+  setFormDisabled(true);
+  setStatus(submitStatus, "請先回首頁輸入正確入場密碼後，再填寫表單", true);
+}
+
+function setFormDisabled(disabled) {
+  const elements = form.querySelectorAll("input, textarea, button");
+  elements.forEach((element) => {
+    element.disabled = disabled;
+  });
+}
+
 function buildPayloadFromForm() {
   const data = new FormData(form);
   const status = data.get("status");
-  const householdName = String(data.get("householdName") || "").trim();
-  const contactName = String(data.get("contactName") || "").trim();
-  const contactPhone = String(data.get("contactPhone") || "").trim();
-  const contactEmail = String(data.get("contactEmail") || "").trim();
+  const householdName = getTextField(data, "householdName");
+  const contactName = getTextField(data, "contactName");
+  const contactPhone = getTextField(data, "contactPhone");
+  const contactEmail = getTextField(data, "contactEmail");
   const adultCount = toSafeInt(data.get("adultCount"));
   const childCount = toSafeInt(data.get("childCount"));
 
@@ -88,11 +99,11 @@ function buildPayloadFromForm() {
     guestCountChild: childCount,
     guestNames,
     mealPreference,
-    specialNeeds: String(data.get("specialNeeds") || "").trim(),
-    message: String(data.get("message") || "").trim(),
+    specialNeeds: getTextField(data, "specialNeeds"),
+    message: getTextField(data, "message"),
     phoneLast4,
     source: "github-pages",
-    version: config.VERSION || "v1.2.0"
+    version: config.VERSION || "v1.2.1"
   };
 }
 
@@ -109,11 +120,16 @@ function toSafeInt(value) {
 }
 
 function readPhoneLast4(value) {
-  const digits = String(value || "").replace(/\D/g, "");
+  const digits = String(value || "").replaceAll(/\D/g, "");
   if (digits.length < 4) {
     throw new Error("電話需至少 4 碼");
   }
   return digits.slice(-4);
+}
+
+function getTextField(formData, key) {
+  const value = formData.get(key);
+  return typeof value === "string" ? value.trim() : "";
 }
 
 function setStatus(node, message, isError) {

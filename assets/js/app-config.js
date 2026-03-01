@@ -10,12 +10,14 @@ const defaultConfig = {
   }
 };
 
+const appConfig = globalThis.APP_CONFIG;
+
 const mergedConfig = {
   ...defaultConfig,
-  ...(window.APP_CONFIG || {}),
+  ...appConfig,
   EVENT: {
     ...defaultConfig.EVENT,
-    ...((window.APP_CONFIG && window.APP_CONFIG.EVENT) || {})
+    ...appConfig?.EVENT
   }
 };
 

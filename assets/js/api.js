@@ -1,4 +1,4 @@
-import { getConfig } from "/assets/js/app-config.js";
+import { getConfig } from "./app-config.js";
 
 async function callApi(action, accessPassword, payload) {
   const { APPS_SCRIPT_URL } = getConfig();
@@ -22,8 +22,8 @@ async function callApi(action, accessPassword, payload) {
   }
 
   if (!response.ok || !body.ok) {
-    const message = body && body.message ? body.message : "提交失敗";
-    const code = body && body.code ? ` (${body.code})` : "";
+    const message = body?.message || "提交失敗";
+    const code = body?.code ? ` (${body.code})` : "";
     throw new Error(`${message}${code}`);
   }
 
