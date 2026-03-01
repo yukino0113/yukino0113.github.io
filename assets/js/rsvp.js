@@ -8,7 +8,7 @@ const submitStatus = document.getElementById("submit-status");
 const authStatus = document.getElementById("auth-status");
 const passwordInput = document.getElementById("access-password");
 
-document.getElementById("footer-version").textContent = config.VERSION || "v1.1.0";
+document.getElementById("footer-version").textContent = config.VERSION || "v1.2.0";
 
 const configErrors = validateConfig();
 if (configErrors.length) {
@@ -16,16 +16,16 @@ if (configErrors.length) {
 }
 
 passwordInput.addEventListener("input", () => {
-  if (passwordInput.value === config.ACCESS_PASSWORD) {
-    authStatus.textContent = "密碼驗證通過";
+  if (String(passwordInput.value || "").trim()) {
+    authStatus.textContent = "已輸入密碼，送出時會驗證";
   } else {
-    authStatus.textContent = "尚未驗證";
+    authStatus.textContent = "尚未輸入密碼";
   }
 });
 
 document.getElementById("reset-form").addEventListener("click", () => {
   form.reset();
-  authStatus.textContent = "尚未驗證";
+  authStatus.textContent = "尚未輸入密碼";
   setStatus(submitStatus, "表單已重設", false);
 });
 
@@ -37,16 +37,13 @@ form.addEventListener("submit", async (event) => {
     if (!accessPassword) {
       throw new Error("請輸入入場密碼");
     }
-    if (accessPassword !== config.ACCESS_PASSWORD) {
-      throw new Error("密碼錯誤，請確認後再送出");
-    }
 
     const payload = buildPayloadFromForm();
     const result = await createRsvp(accessPassword, payload);
 
     setStatus(submitStatus, result.message || "送出成功", false);
     form.reset();
-    authStatus.textContent = "尚未驗證";
+    authStatus.textContent = "尚未輸入密碼";
   } catch (error) {
     setStatus(submitStatus, error.message, true);
   }
@@ -95,7 +92,7 @@ function buildPayloadFromForm() {
     message: String(data.get("message") || "").trim(),
     phoneLast4,
     source: "github-pages",
-    version: config.VERSION || "v1.1.0"
+    version: config.VERSION || "v1.2.0"
   };
 }
 
