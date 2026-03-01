@@ -6,34 +6,41 @@ const STEP1_KEY = "WEDDING_RSVP_STEP1";
 
 const form = document.getElementById("rsvp-form");
 const submitStatus = document.getElementById("submit-status");
+const footerVersion = document.getElementById("footer-version");
 
-document.getElementById("footer-version").textContent = config.VERSION || "v1.2.1";
-
-const configErrors = validateConfig();
-if (configErrors.length) {
-  setStatus(submitStatus, configErrors.join("；"), true);
+if (footerVersion) {
+  footerVersion.textContent = config.VERSION || "v1.2.1";
 }
 
-enforceAccessGate();
-restoreStep1Draft();
-
-form.addEventListener("submit", (event) => {
-  event.preventDefault();
-
-  try {
-    const accessPassword = String(sessionStorage.getItem(PASSWORD_KEY) || "").trim();
-    if (!accessPassword || accessPassword !== config.WEDDING_ACCESS_PASSWORD) {
-      setStatus(submitStatus, "請先回首頁輸入正確入場密碼", true);
-      return;
-    }
-
-    const step1Data = buildStep1Data();
-    sessionStorage.setItem(STEP1_KEY, JSON.stringify(step1Data));
-    globalThis.location.href = "/invite.html";
-  } catch (error) {
-    setStatus(submitStatus, error.message, true);
+if (form && submitStatus) {
+  const configErrors = validateConfig();
+  if (configErrors.length) {
+    setStatus(submitStatus, configErrors.join("；"), true);
   }
-});
+
+  enforceAccessGate();
+  restoreStep1Draft();
+
+  form.addEventListener("submit", (event) => {
+    event.preventDefault();
+
+    try {
+      const accessPassword = String(sessionStorage.getItem(PASSWORD_KEY) || "").trim();
+      if (!accessPassword || accessPassword !== config.WEDDING_ACCESS_PASSWORD) {
+        setStatus(submitStatus, "請先回首頁輸入正確入場密碼", true);
+        return;
+      }
+
+      const step1Data = buildStep1Data();
+      sessionStorage.setItem(STEP1_KEY, JSON.stringify(step1Data));
+      globalThis.location.href = "/invite.html";
+    } catch (error) {
+      setStatus(submitStatus, error.message, true);
+    }
+  });
+} else {
+  console.warn("RSVP form elements not found; rsvp.js initialization skipped.");
+}
 
 function enforceAccessGate() {
   const accessPassword = String(sessionStorage.getItem(PASSWORD_KEY) || "").trim();
