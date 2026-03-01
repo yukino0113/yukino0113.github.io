@@ -27,7 +27,7 @@ jobs:
         with:
           node-version: "20"
 
-      - name: Generate config.js from GitHub Environment
+      - name: Build deploy artifact
         env:
           APPS_SCRIPT_URL: ${{ vars.APPS_SCRIPT_URL }}
           VERSION: ${{ vars.VERSION }}
@@ -35,7 +35,7 @@ jobs:
           EVENT_DATE: ${{ vars.EVENT_DATE }}
           EVENT_VENUE: ${{ vars.EVENT_VENUE }}
           EVENT_DEADLINE: ${{ vars.EVENT_DEADLINE }}
-        run: node scripts/generate-config.mjs
+        run: npm run build:pages
 
       - name: Configure Pages
         uses: actions/configure-pages@v5
@@ -43,7 +43,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: .
+          path: public
 
   deploy:
     needs: build

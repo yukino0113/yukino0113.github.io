@@ -1,7 +1,9 @@
 import fs from "node:fs";
 import path from "node:path";
+import { fileURLToPath } from "node:url";
 
-const projectRoot = path.resolve(path.dirname(new URL(import.meta.url).pathname), "..");
+const currentFilePath = fileURLToPath(import.meta.url);
+const projectRoot = path.resolve(path.dirname(currentFilePath), "..");
 const envPath = path.join(projectRoot, ".env");
 const outputPath = path.join(projectRoot, "config.js");
 

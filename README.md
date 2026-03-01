@@ -1,83 +1,73 @@
 # Wedding Form (Minecraft Style)
 
-婚宴賓客表單網站，採用純 `HTML/CSS/JS`，可部署於 GitHub Pages，資料透過 Google Apps Script 寫入 Google Sheets。
+婚宴賓客表單網站（純 `HTML/CSS/JS`），部署於 GitHub Pages，資料寫入 Google Sheets（Apps Script）。
 
-## 需求對應（目前版本）
+## Current Scope
 
-- 使用密碼進入（由後端驗證，不在前端儲存密碼）
-- `config.js` 由 `.env`（本地）或 GitHub Environments（部署）動態產生
-- 已移除「不吃牛」欄位
-- 已移除賓客端查詢/修改流程（僅送出）
+- 賓客以密碼送出表單（僅送出，不支援修改）
+- 設定由 `config.js` 載入
+- `config.js` 可由 `.env`（本地）或 GitHub Environments（CI）產生
 
-## 專案結構
+## Structure
 
 - `index.html`: 首頁
-- `rsvp.html`: 表單頁（僅送出）
+- `rsvp.html`: 表單頁
 - `assets/css/styles.css`: Minecraft 風格樣式
-- `assets/js/home.js`: 首頁渲染
-- `assets/js/rsvp.js`: 表單驗證與送出
-- `assets/js/api.js`: API 呼叫
-- `assets/js/app-config.js`: config 驗證
+- `assets/js/*.js`: 前端邏輯
+- `apps-script/Code.gs`: Apps Script API
 - `scripts/generate-config.mjs`: 產生 `config.js`
-- `apps-script/Code.gs`: Apps Script API（僅 `create_rsvp`）
-- `.github/workflows/deploy-pages.yml`: 由 GitHub Actions + Environment 部署
+- `scripts/prepare-pages.mjs`: 打包 `public/` 部署目錄
+- `.github/workflows/deploy-pages.yml`: GitHub Pages 部署流程
 
-## 1) 設定 Google Apps Script
+## 1) Apps Script Setup
 
-1. 建立 Google Sheet
-2. 開啟 `Extensions > Apps Script`
-3. 貼上 `apps-script/Code.gs`
-4. 在 `Project Settings > Script properties` 設定：
-- `ACCESS_PASSWORD = <你的表單密碼>`
-5. Deploy Web App：
+1. 在 Google Sheet 開啟 `Extensions > Apps Script`
+2. 貼上 `apps-script/Code.gs`
+3. 在 `Project Settings > Script properties` 設定：
+- `ACCESS_PASSWORD=<你的密碼>`
+4. Deploy Web App：
 - Execute as: `Me`
 - Who has access: `Anyone`
 
-首次呼叫會自動建立 `rsvps` 與 `config` 工作表。
+## 2) GitHub Environment Setup (Recommended)
 
-## 2) 使用 GitHub Environments 管理前端設定（推薦）
-
-到 GitHub Repo：`Settings > Environments` 建立 `production`，在該 Environment 的 Variables 設定：
+Repo `Settings > Environments > production > Variables` 設定：
 
 - `APPS_SCRIPT_URL`
-- `VERSION`（可選，例：`v1.2.0`）
 - `EVENT_COUPLE`
 - `EVENT_DATE`
 - `EVENT_VENUE`
 - `EVENT_DEADLINE`
+- `VERSION`（可選）
 
-推送到 `main` 後，`Deploy Pages` workflow 會自動：
-1. 讀取 Environment Variables
-2. 產生 `config.js`
-3. 部署到 GitHub Pages
+> `ACCESS_PASSWORD` 不應放到前端設定，只存 Apps Script Script Properties。
 
-> 注意：`ACCESS_PASSWORD` 不會放進 `config.js`，只存在 Apps Script 的 Script Properties。
+## 3) Deploy (GitHub Actions)
 
-## 3) GitHub Pages 設定
+1. Repo `Settings > Pages`，Source 選 **GitHub Actions**
+2. push 到 `main` 後會自動執行 `Deploy Pages`
+3. 工作流程會：
+- 產生 `config.js`
+- 打包 `public/`
+- 部署到 Pages
 
-1. 在 Repo `Settings > Pages`
-2. Source 改為 **GitHub Actions**
-3. 確認 workflow `Deploy Pages` 成功
-4. 網址：`https://yukino0113.github.io/`
-
-## 4) 本地開發（可選）
-
-如需本地測試，可使用 `.env`：
+## 4) Local Dev (Optional)
 
 ```bash
 cp .env.example .env
 npm run build:config
+npm run build:pages
 ```
 
-`.env.example` 欄位：
+本地 `.env` 欄位：
 - `APPS_SCRIPT_URL`
-- `VERSION`
 - `EVENT_COUPLE`
 - `EVENT_DATE`
 - `EVENT_VENUE`
 - `EVENT_DEADLINE`
+- `VERSION`（可選）
 
-## API 格式
+## API Request
 
 `POST` body:
 
@@ -89,4 +79,4 @@ npm run build:config
 }
 ```
 
-錯誤碼：`UNAUTHORIZED`, `INVALID_INPUT`, `DEADLINE_PASSED`, `INTERNAL_ERROR`
+Error codes: `UNAUTHORIZED`, `INVALID_INPUT`, `DEADLINE_PASSED`, `INTERNAL_ERROR`

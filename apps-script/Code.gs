@@ -78,7 +78,7 @@ function handleCreate_(payload) {
     payload.message || "",
     payload.phoneLast4,
     payload.source || "github-pages",
-    payload.version || "v1.1.0"
+    payload.version || "v1.2.1"
   ];
 
   sheet.appendRow(row);
@@ -208,7 +208,7 @@ function ensureSheets_() {
     config.appendRow(["event_name", "婚宴賓客表單"]);
     config.appendRow(["event_date", "2026-12-20T18:00:00+08:00"]);
     config.appendRow(["max_guest_per_household", "10"]);
-    config.appendRow(["sheet_version", "v1.1.0"]);
+    config.appendRow(["sheet_version", "v1.2.1"]);
   }
 }
 
