@@ -29,7 +29,9 @@ jobs:
 
       - name: Build deploy artifact
         env:
+          APP_ENV: production
           APPS_SCRIPT_URL: ${{ vars.APPS_SCRIPT_URL }}
+          WEDDING_ACCESS_PASSWORD: ${{ vars.WEDDING_ACCESS_PASSWORD }}
           VERSION: ${{ vars.VERSION }}
           EVENT_COUPLE: ${{ vars.EVENT_COUPLE }}
           EVENT_DATE: ${{ vars.EVENT_DATE }}

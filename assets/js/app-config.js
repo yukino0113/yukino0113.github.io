@@ -1,5 +1,6 @@
 const defaultConfig = {
   APPS_SCRIPT_URL: "",
+  WEDDING_ACCESS_PASSWORD: "",
   VERSION: "v1.2.0",
   EVENT: {
     COUPLE: "請在 config.js 設定新人名稱",
@@ -26,6 +27,9 @@ export function validateConfig() {
   const errors = [];
   if (!mergedConfig.APPS_SCRIPT_URL) {
     errors.push("APPS_SCRIPT_URL 尚未設定");
+  }
+  if (!mergedConfig.WEDDING_ACCESS_PASSWORD) {
+    errors.push("WEDDING_ACCESS_PASSWORD 尚未設定");
   }
   return errors;
 }

@@ -85,21 +85,13 @@
             <textarea name="message" rows="3" maxlength="400"></textarea>
           </label>
 
-          <div class="auth-panel">
-            <h3>入場密碼（送出前必填）</h3>
-            <label>
-              密碼
-              <input name="accessPassword" id="access-password" type="password" maxlength="64" required />
-            </label>
-            <p id="auth-status">尚未驗證</p>
-          </div>
-
           <div class="actions">
             <button type="submit" class="pixel-btn">送出回覆</button>
             <button type="button" class="pixel-btn secondary" id="reset-form">重設</button>
           </div>
         </form>
 
+        <p class="subtitle">請先於首頁輸入入場密碼，再送出本表單。</p>
         <p class="status" id="submit-status" role="status" aria-live="polite"></p>
       </section>
     </main>

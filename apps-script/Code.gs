@@ -114,9 +114,9 @@ function parseRequest_(e) {
 }
 
 function verifyAccessPassword_(accessPassword) {
-  const expected = PropertiesService.getScriptProperties().getProperty("ACCESS_PASSWORD");
+  const expected = PropertiesService.getScriptProperties().getProperty("WEDDING_ACCESS_PASSWORD");
   if (!expected) {
-    throw createError_("UNAUTHORIZED", "後端未設定 ACCESS_PASSWORD");
+    throw createError_("UNAUTHORIZED", "後端未設定 WEDDING_ACCESS_PASSWORD");
   }
   if (String(accessPassword) !== String(expected)) {
     throw createError_("UNAUTHORIZED", "密碼驗證失敗");

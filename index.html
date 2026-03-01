@@ -68,7 +68,15 @@
           <li>禁止任何方式的作弊行為（如使用 Xray 等材質包）。</li>
           <li>請尊重其他玩家，禁止使用任何色情、暴力、仇恨言論。</li>
         </ul>
-        <a class="pixel-btn large" href="/rsvp.html">前往回覆表單</a>
+        <div class="auth-panel">
+          <h3>入場密碼</h3>
+          <label>
+            請輸入主辦方提供的密碼
+            <input id="home-access-password" type="password" maxlength="64" />
+          </label>
+          <p class="status" id="home-auth-status" role="status" aria-live="polite"></p>
+        </div>
+        <a class="pixel-btn large" id="go-rsvp" href="/rsvp.html">前往回覆表單</a>
       </section>
     </main>
 
