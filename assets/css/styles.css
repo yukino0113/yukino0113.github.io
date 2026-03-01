@@ -68,9 +68,6 @@ body {
   padding: 1.1rem;
 }
 
-.site-header h1,
-h2,
-h3,
 .eyebrow,
 .pixel-btn,
 legend {
@@ -79,8 +76,18 @@ legend {
 }
 
 .site-header h1 {
+  font-family: "Noto Sans TC", sans-serif;
+  letter-spacing: 0.01em;
+  font-weight: 800;
   font-size: clamp(1.1rem, 2.8vw, 1.7rem);
   margin: 0.35rem 0 0.6rem;
+}
+
+h2,
+h3 {
+  font-family: "Noto Sans TC", sans-serif;
+  letter-spacing: 0.01em;
+  font-weight: 800;
 }
 
 .eyebrow {
@@ -194,6 +201,11 @@ h3 {
   box-shadow: 0 4px 0 #5e6672;
 }
 
+.pixel-btn.submit-btn {
+  background: #7f868f;
+  box-shadow: 0 4px 0 #5f6670;
+}
+
 .text-link {
   color: #224f80;
   font-weight: 700;
@@ -211,12 +223,31 @@ legend {
   padding: 0 0.4rem;
 }
 
+.section-legend {
+  font-size: 1rem;
+  font-family: "Noto Sans TC", sans-serif;
+  font-weight: 800;
+}
+
 label {
   display: flex;
   flex-direction: column;
   gap: 0.35rem;
   font-weight: 700;
   margin-bottom: 0.8rem;
+}
+
+.radio-option {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.55rem;
+  margin-bottom: 0.5rem;
+}
+
+.radio-option input[type="radio"] {
+  margin: 0;
+  flex: 0 0 auto;
 }
 
 input,

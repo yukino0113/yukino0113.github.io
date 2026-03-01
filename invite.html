@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>禮智＆恩慈 婚禮伺服器 - 推播資訊</title>
+    <meta name="description" content="婚宴賓客白名單資料表 - 推播資訊" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Noto+Sans+TC:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/assets/css/styles.css" />
+  </head>
+  <body>
+    <div class="sky"></div>
+    <header class="site-header pixel-card compact">
+      <h1>白名單申請資料表（2/2）</h1>
+      <p class="subtitle">設定伺服器推播（喜帖）接收方式，完成後即可送出。</p>
+    </header>
+
+    <main class="rsvp-layout">
+      <section class="pixel-card form-card">
+        <h2>伺服器資訊推播資訊</h2>
+        <p class="subtitle" id="step1-summary"></p>
+
+        <form id="invite-form" novalidate>
+          <fieldset>
+            <legend class="section-legend">伺服器推播（喜帖）接受方式</legend>
+            <label class="radio-option"><input type="radio" name="inviteMode" value="digital" required /> 雲端電子公告（透過紅石傳送）</label>
+            <label class="radio-option"><input type="radio" name="inviteMode" value="paper" /> 紙本說明 （透過我們在 overworld 的 Enderman 傳送）</label>
+            <label class="radio-option"><input type="radio" name="inviteMode" value="both" /> 兩者都要！</label>
+            <label class="radio-option">
+              <input type="radio" name="inviteMode" value="none" />
+              我是通靈系玩家！我不需要任何公告！！（憤怒）
+            </label>
+          </fieldset>
+
+          <div class="auth-panel" id="invite-recipient-block">
+            <h3>收件人資訊</h3>
+            <label>
+              收件人姓名
+              <input name="inviteRecipientName" type="text" maxlength="80" />
+            </label>
+          </div>
+
+          <div class="auth-panel" id="digital-method-block" hidden>
+            <h3>電子喜帖寄送方式</h3>
+            <label class="radio-option"><input type="radio" name="digitalMethod" value="email" /> 電子郵件</label>
+            <label class="radio-option"><input type="radio" name="digitalMethod" value="line" /> Line ID</label>
+            <label class="radio-option"><input type="radio" name="digitalMethod" value="other" /> 其他</label>
+            <label>
+              聯絡資訊
+              <input name="digitalContact" type="text" maxlength="120" placeholder="Email / Line ID / 其他聯絡方式" />
+            </label>
+          </div>
+
+          <div class="auth-panel" id="paper-address-block" hidden>
+            <h3>紙本喜帖寄送地址</h3>
+            <label>
+              收件地址
+              <textarea name="paperAddress" rows="3" maxlength="240" placeholder="請填寫完整郵遞區號與地址"></textarea>
+            </label>
+          </div>
+
+          <div class="actions">
+            <button type="button" class="pixel-btn secondary" id="back-to-rsvp">返回上一步</button>
+            <button type="submit" class="pixel-btn submit-btn">送出回覆</button>
+          </div>
+
+          <output class="status" id="submit-status" aria-live="polite"></output>
+        </form>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <p id="footer-version">Version</p>
+    </footer>
+
+    <script src="/config.js"></script>
+    <script type="module" src="/assets/js/invite.js"></script>
+  </body>
+</html>

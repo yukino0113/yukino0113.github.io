@@ -9,6 +9,7 @@ const outDir = path.join(root, "public");
 const entries = [
   "index.html",
   "rsvp.html",
+  "invite.html",
   "config.js",
   "assets"
 ];

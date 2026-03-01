@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>禮智＆恩慈 婚禮伺服器 - 白名單申請</title>
-    <meta name="description" content="婚宴賓客回覆表單" />
+    <meta name="description" content="婚宴賓客白名單資料表 - 基本資訊" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -16,7 +16,7 @@
   <body>
     <div class="sky"></div>
     <header class="site-header pixel-card compact">
-      <h1>白名單申請資料表</h1>
+      <h1>白名單申請資料表（1/2）</h1>
       <pre class="console-log">
         <span class="log-info">[12:00:00] [Main Thread/INFO]: Logging in as... ??</span>
         <span class="log-info">[12:00:00] [Main Thread/INFO]: Loading world...</span>
@@ -27,11 +27,10 @@
 
     <main class="rsvp-layout">
       <section class="pixel-card form-card">
-        <h2>白名單申請表</h2>
+        <h2>白名單基本資料</h2>
 
         <form id="rsvp-form" novalidate>
           <div class="form-grid">
-
             <label>
               /whitelist add {聯絡人姓名}
               <input name="contactName" type="text" maxlength="80" required />
@@ -44,12 +43,12 @@
 
             <label>
               /party create {成人人數}
-              <input name="adultCount" type="number" min="1" max="10" value="1" required />
+              <input name="adultCount" type="number" min="1" max="5" value="1" required />
             </label>
 
             <label>
               /summon villager ~ ~ ~ {Age:-24000} {需要兒童椅的兒童人數}
-              <input name="childCount" type="number" min="0" max="10" value="0" required />
+              <input name="childCount" type="number" min="0" max="5" value="0" required />
             </label>
           </div>
 
@@ -71,9 +70,10 @@
           </label>
 
           <div class="actions">
-            <button type="submit" class="pixel-btn">送出回覆</button>
-            <button type="button" class="pixel-btn secondary" id="reset-form">重設</button>
+            <button type="submit" class="pixel-btn submit-btn">下一步：推播資訊</button>
           </div>
+
+          <output class="status" id="submit-status" aria-live="polite"></output>
         </form>
       </section>
     </main>
