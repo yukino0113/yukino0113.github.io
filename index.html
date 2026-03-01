@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>我們的婚禮 RSVP</title>
+    <meta
+      name="description"
+      content="Minecraft 風格婚宴 RSVP 表單，快速回覆是否出席與同行資訊。"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Noto+Sans+TC:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/assets/css/styles.css" />
+  </head>
+  <body>
+    <div class="sky"></div>
+    <header class="site-header pixel-card">
+      <p class="eyebrow">Wedding Quest</p>
+      <h1>歡迎參加我們的婚宴</h1>
+      <p class="subtitle">請協助填寫 RSVP，讓我們把每一桌都安排得剛剛好。</p>
+    </header>
+
+    <main class="home-layout">
+      <section class="pixel-card info-card">
+        <h2>婚宴資訊</h2>
+        <dl class="event-meta" id="event-meta">
+          <div>
+            <dt>新人</dt>
+            <dd id="event-couple">請在 config.js 設定</dd>
+          </div>
+          <div>
+            <dt>日期</dt>
+            <dd id="event-date">請在 config.js 設定</dd>
+          </div>
+          <div>
+            <dt>地點</dt>
+            <dd id="event-venue">請在 config.js 設定</dd>
+          </div>
+          <div>
+            <dt>回覆截止</dt>
+            <dd id="event-deadline">請在 config.js 設定</dd>
+          </div>
+        </dl>
+      </section>
+
+      <section class="pixel-card quest-card">
+        <h2>任務說明</h2>
+        <ol>
+          <li>進入 RSVP 頁面，填寫主要聯絡人與同行資訊。</li>
+          <li>送出前使用 Google 帳號驗證身分。</li>
+          <li>送出成功後會取得回覆編號，可在截止日前修改。</li>
+        </ol>
+        <a class="pixel-btn large" href="/rsvp.html">前往 RSVP 表單</a>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <p id="footer-version">Version</p>
+    </footer>
+
+    <script src="/config.js"></script>
+    <script type="module" src="/assets/js/home.js"></script>
+  </body>
+</html>
