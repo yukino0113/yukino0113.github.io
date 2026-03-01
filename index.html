@@ -19,18 +19,19 @@
   <body>
     <div class="sky"></div>
     <header class="site-header pixel-card">
-      <p class="eyebrow">Wedding Quest</p>
+      <p class="eyebrow">Minecraft Server</p>
       <h1>⛏《禮智＆恩慈 婚禮伺服器》白名單申請</h1>
-      <p class="subtitle">請協助填寫表單，讓我們把每一桌都安排得剛剛好。</p>
       <pre class="console-log">
-[12:00:01] [Main Thread/INFO]: Loading Wedding Modpack v1.0.0
+[12:00:01] [Main Thread/INFO]: Server starting...
+[12:00:01] [Main Thread/INFO]: Loading Wedding Modpack v1.1.3 on Minecraft 8.3.1
 [12:00:12] [Main Thread/INFO]: Checking player whitelist...
-[12:00:19] [Main Thread/INFO]: Generating ceremony spawn chunks...
-[12:01:13] [Main Thread/INFO]: Preparing banquet chunks...
-[12:01:22] [Main Thread/INFO]: Love synchronization complete
+[12:00:19] [WeddingIO]: Generating ceremony spawn chunks...
+[12:01:13] [ManaMetalMod]: Preparing banquet chunks...
+[12:01:22] [MarriageFirmCraft]: Love synchronization complete
 [12:01:23] [Main Thread/INFO]: TPS stable at 20.0
-[12:02:05] [Main Thread/WARN]: Entity "Single_Status" is being replaced by "Married_Status".
+[12:02:05] [RingCraft]: Entity Groom/Bride "Single_Status" is replaced by "Married_Status".
 [12:08:31] [Main Thread/INFO]: Server ready. Players may now join.</pre>
+      <p class="subtitle">模組包載入成功，請各位玩家依照下方說明進行白名單申請，以確保當天伺服器不會崩潰：</p>
     </header>
 
     <main class="home-layout">
@@ -74,7 +75,7 @@
             請輸入主辦方提供的密碼
             <input id="home-access-password" type="password" maxlength="64" />
           </label>
-          <p class="status" id="home-auth-status" role="status" aria-live="polite"></p>
+          <output class="status" id="home-auth-status" aria-live="polite"></output>
         </div>
         <a class="pixel-btn large" id="go-rsvp" href="/rsvp.html">前往回覆表單</a>
       </section>
