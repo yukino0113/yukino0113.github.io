@@ -1,7 +1,7 @@
 window.APP_CONFIG = {
   APPS_SCRIPT_URL: "https://script.google.com/macros/s/REPLACE_WITH_DEPLOYMENT_ID/exec",
-  GOOGLE_CLIENT_ID: "REPLACE_WITH_GOOGLE_CLIENT_ID.apps.googleusercontent.com",
-  VERSION: "v1.0.0",
+  ACCESS_PASSWORD: "PLEASE_CHANGE_ME",
+  VERSION: "v1.1.0",
   EVENT: {
     COUPLE: "王小明 & 李小美",
     DATE: "2026/12/20（日） 18:00",

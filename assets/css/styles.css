@@ -57,7 +57,7 @@ body {
 }
 
 .rsvp-layout {
-  grid-template-columns: 1.6fr 1fr;
+  grid-template-columns: 1fr;
   align-items: start;
 }
 
@@ -250,12 +250,6 @@ textarea:focus-visible,
 
 .compact {
   padding: 0.95rem;
-}
-
-@media (max-width: 900px) {
-  .rsvp-layout {
-    grid-template-columns: 1fr;
-  }
 }
 
 @media (max-width: 640px) {

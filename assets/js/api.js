@@ -1,6 +1,6 @@
 import { getConfig } from "/assets/js/app-config.js";
 
-async function callApi(action, idToken, payload) {
+async function callApi(action, accessPassword, payload) {
   const { APPS_SCRIPT_URL } = getConfig();
   if (!APPS_SCRIPT_URL) {
     throw new Error("APPS_SCRIPT_URL 尚未設定，請先建立 config.js");
@@ -11,7 +11,7 @@ async function callApi(action, idToken, payload) {
     headers: {
       "Content-Type": "application/json"
     },
-    body: JSON.stringify({ action, idToken, payload })
+    body: JSON.stringify({ action, accessPassword, payload })
   });
 
   let body;
@@ -30,14 +30,6 @@ async function callApi(action, idToken, payload) {
   return body;
 }
 
-export function createRsvp(idToken, payload) {
-  return callApi("create_rsvp", idToken, payload);
-}
-
-export function getRsvp(idToken, payload) {
-  return callApi("get_rsvp", idToken, payload);
-}
-
-export function updateRsvp(idToken, payload) {
-  return callApi("update_rsvp", idToken, payload);
+export function createRsvp(accessPassword, payload) {
+  return callApi("create_rsvp", accessPassword, payload);
 }

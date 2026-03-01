@@ -1,0 +1,8 @@
+{
+  "name": "wedding-minecraft-form",
+  "private": true,
+  "version": "1.1.0",
+  "scripts": {
+    "build:config": "node scripts/generate-config.mjs"
+  }
+}

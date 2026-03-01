@@ -1,7 +1,7 @@
 const defaultConfig = {
   APPS_SCRIPT_URL: "",
-  GOOGLE_CLIENT_ID: "",
-  VERSION: "v1.0.0",
+  ACCESS_PASSWORD: "",
+  VERSION: "v1.1.0",
   EVENT: {
     COUPLE: "請在 config.js 設定新人名稱",
     DATE: "請在 config.js 設定婚宴日期",
@@ -28,8 +28,8 @@ export function validateConfig() {
   if (!mergedConfig.APPS_SCRIPT_URL) {
     errors.push("APPS_SCRIPT_URL 尚未設定");
   }
-  if (!mergedConfig.GOOGLE_CLIENT_ID) {
-    errors.push("GOOGLE_CLIENT_ID 尚未設定");
+  if (!mergedConfig.ACCESS_PASSWORD) {
+    errors.push("ACCESS_PASSWORD 尚未設定");
   }
   return errors;
 }

@@ -1,142 +1,56 @@
 import { getConfig, validateConfig } from "/assets/js/app-config.js";
-import { createRsvp, getRsvp, updateRsvp } from "/assets/js/api.js";
+import { createRsvp } from "/assets/js/api.js";
 
 const config = getConfig();
 
 const form = document.getElementById("rsvp-form");
-const lookupForm = document.getElementById("lookup-form");
 const submitStatus = document.getElementById("submit-status");
-const lookupStatus = document.getElementById("lookup-status");
 const authStatus = document.getElementById("auth-status");
-const submissionIdNode = document.getElementById("submission-id");
+const passwordInput = document.getElementById("access-password");
 
-document.getElementById("footer-version").textContent = config.VERSION || "v1.0.0";
-
-let idToken = "";
-let googleProfile = null;
-let loadedSubmissionId = "";
+document.getElementById("footer-version").textContent = config.VERSION || "v1.1.0";
 
 const configErrors = validateConfig();
 if (configErrors.length) {
   setStatus(submitStatus, configErrors.join("；"), true);
 }
 
-document.getElementById("reset-form").addEventListener("click", () => {
-  form.reset();
-  loadedSubmissionId = "";
-  submissionIdNode.textContent = "";
-  setStatus(submitStatus, "表單已重設", false);
+passwordInput.addEventListener("input", () => {
+  if (passwordInput.value === config.ACCESS_PASSWORD) {
+    authStatus.textContent = "密碼驗證通過";
+  } else {
+    authStatus.textContent = "尚未驗證";
+  }
 });
 
-document.getElementById("update-rsvp").addEventListener("click", async () => {
-  if (!loadedSubmissionId) {
-    setStatus(lookupStatus, "請先使用回覆編號載入資料", true);
-    return;
-  }
-  if (!idToken) {
-    setStatus(submitStatus, "更新前請先完成 Google 驗證", true);
-    return;
-  }
-
-  try {
-    const payload = buildPayloadFromForm();
-    payload.submissionId = loadedSubmissionId;
-    payload.phoneLast4 = readPhoneLast4(lookupForm.phoneLast4.value);
-
-    const result = await updateRsvp(idToken, payload);
-    setStatus(submitStatus, result.message || "更新成功", false);
-  } catch (error) {
-    setStatus(submitStatus, error.message, true);
-  }
+document.getElementById("reset-form").addEventListener("click", () => {
+  form.reset();
+  authStatus.textContent = "尚未驗證";
+  setStatus(submitStatus, "表單已重設", false);
 });
 
 form.addEventListener("submit", async (event) => {
   event.preventDefault();
-  if (!idToken) {
-    setStatus(submitStatus, "送出前請先完成 Google 驗證", true);
-    return;
-  }
 
   try {
-    const payload = buildPayloadFromForm();
-    const result = await createRsvp(idToken, payload);
-
-    loadedSubmissionId = result.submissionId || "";
-    setStatus(submitStatus, result.message || "送出成功", false);
-
-    if (loadedSubmissionId) {
-      submissionIdNode.textContent = `你的回覆編號：${loadedSubmissionId}`;
-      lookupForm.submissionId.value = loadedSubmissionId;
-      lookupForm.phoneLast4.value = payload.phoneLast4;
+    const accessPassword = String(passwordInput.value || "").trim();
+    if (!accessPassword) {
+      throw new Error("請輸入入場密碼");
     }
+    if (accessPassword !== config.ACCESS_PASSWORD) {
+      throw new Error("密碼錯誤，請確認後再送出");
+    }
+
+    const payload = buildPayloadFromForm();
+    const result = await createRsvp(accessPassword, payload);
+
+    setStatus(submitStatus, result.message || "送出成功", false);
+    form.reset();
+    authStatus.textContent = "尚未驗證";
   } catch (error) {
     setStatus(submitStatus, error.message, true);
   }
 });
-
-lookupForm.addEventListener("submit", async (event) => {
-  event.preventDefault();
-  if (!idToken) {
-    setStatus(lookupStatus, "查詢前請先完成 Google 驗證", true);
-    return;
-  }
-
-  try {
-    const payload = {
-      submissionId: lookupForm.submissionId.value.trim(),
-      phoneLast4: readPhoneLast4(lookupForm.phoneLast4.value)
-    };
-
-    if (!payload.submissionId) {
-      throw new Error("請輸入 submissionId");
-    }
-
-    const result = await getRsvp(idToken, payload);
-    fillForm(result.data);
-    loadedSubmissionId = payload.submissionId;
-    setStatus(lookupStatus, result.message || "資料已載入，可編修後按更新", false);
-  } catch (error) {
-    setStatus(lookupStatus, error.message, true);
-  }
-});
-
-window.addEventListener("load", () => {
-  initGoogleSignIn();
-});
-
-function initGoogleSignIn() {
-  if (!window.google || !window.google.accounts || !window.google.accounts.id) {
-    setStatus(submitStatus, "Google 登入載入失敗，請稍後重整", true);
-    return;
-  }
-  if (!config.GOOGLE_CLIENT_ID) {
-    setStatus(submitStatus, "GOOGLE_CLIENT_ID 未設定，暫時無法登入", true);
-    return;
-  }
-
-  window.google.accounts.id.initialize({
-    client_id: config.GOOGLE_CLIENT_ID,
-    callback: onGoogleCredential
-  });
-
-  window.google.accounts.id.renderButton(document.getElementById("google-signin"), {
-    theme: "filled_blue",
-    size: "large",
-    shape: "rectangular",
-    text: "signin_with",
-    width: 280
-  });
-}
-
-function onGoogleCredential(response) {
-  idToken = response.credential || "";
-  googleProfile = parseJwtPayload(idToken);
-  if (googleProfile && googleProfile.email) {
-    authStatus.textContent = `已驗證：${googleProfile.email}`;
-  } else {
-    authStatus.textContent = "已完成 Google 驗證";
-  }
-}
 
 function buildPayloadFromForm() {
   const data = new FormData(form);
@@ -155,14 +69,13 @@ function buildPayloadFromForm() {
     throw new Error("請完成必填欄位：帖子/家戶名稱、聯絡人姓名、聯絡電話");
   }
 
-  if (adultCount + childCount < 0 || adultCount > 20 || childCount > 20) {
+  if (adultCount > 20 || childCount > 20) {
     throw new Error("人數欄位超出可接受範圍");
   }
 
   const guestNames = splitLines(data.get("guestNames"));
   const mealPreference = {
     vegetarianCount: toSafeInt(data.get("vegetarianCount")),
-    noBeefCount: toSafeInt(data.get("noBeefCount")),
     kidsMealCount: toSafeInt(data.get("kidsMealCount"))
   };
 
@@ -182,37 +95,8 @@ function buildPayloadFromForm() {
     message: String(data.get("message") || "").trim(),
     phoneLast4,
     source: "github-pages",
-    version: config.VERSION || "v1.0.0"
+    version: config.VERSION || "v1.1.0"
   };
-}
-
-function fillForm(data) {
-  if (!data) {
-    return;
-  }
-
-  if (data.status === "attend" || data.status === "decline") {
-    const input = form.querySelector(`input[name="status"][value="${data.status}"]`);
-    if (input) {
-      input.checked = true;
-    }
-  }
-
-  form.householdName.value = data.householdName || "";
-  form.contactName.value = data.contactName || "";
-  form.contactPhone.value = data.contactPhone || "";
-  form.contactEmail.value = data.contactEmail || "";
-  form.adultCount.value = data.guestCountAdult ?? 0;
-  form.childCount.value = data.guestCountChild ?? 0;
-  form.guestNames.value = Array.isArray(data.guestNames) ? data.guestNames.join("\n") : "";
-
-  const meals = data.mealPreference || {};
-  form.vegetarianCount.value = meals.vegetarianCount ?? 0;
-  form.noBeefCount.value = meals.noBeefCount ?? 0;
-  form.kidsMealCount.value = meals.kidsMealCount ?? 0;
-
-  form.specialNeeds.value = data.specialNeeds || "";
-  form.message.value = data.message || "";
 }
 
 function splitLines(value) {
@@ -220,21 +104,6 @@ function splitLines(value) {
     .split("\n")
     .map((x) => x.trim())
     .filter(Boolean);
-}
-
-function parseJwtPayload(token) {
-  if (!token || token.split(".").length !== 3) {
-    return null;
-  }
-
-  try {
-    const payloadPart = token.split(".")[1];
-    const normalized = payloadPart.replace(/-/g, "+").replace(/_/g, "/");
-    const decoded = atob(normalized.padEnd(Math.ceil(normalized.length / 4) * 4, "="));
-    return JSON.parse(decoded);
-  } catch {
-    return null;
-  }
 }
 
 function toSafeInt(value) {
