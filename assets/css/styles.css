@@ -101,8 +101,26 @@ legend {
   background: #141414;
   color: #92f07e;
   font-family: "Courier New", monospace;
-  white-space: pre-wrap;
-  line-height: 1.45;
+  white-space: normal;
+  line-height: 1.2;
+}
+
+.console-log .log-info {
+  color: #ffffff;
+  display: block;
+  margin: 0;
+}
+
+.console-log .log-warn {
+  color: #ffd84d;
+  display: block;
+  margin: 0;
+}
+
+.console-log .log-error {
+  color: #ff6b6b;
+  display: block;
+  margin: 0;
 }
 
 h2 {

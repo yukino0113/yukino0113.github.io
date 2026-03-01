@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>婚宴回覆表單</title>
+    <title>禮智＆恩慈 婚禮伺服器 - 白名單申請</title>
     <meta name="description" content="婚宴賓客回覆表單" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -16,62 +16,47 @@
   <body>
     <div class="sky"></div>
     <header class="site-header pixel-card compact">
-      <h1>婚宴回覆表單</h1>
-      <p class="subtitle">每張帖子填寫一筆資料，送出後將由主辦方統一彙整。</p>
-      <a class="text-link" href="/index.html">回首頁</a>
+      <h1>白名單申請資料表</h1>
+      <pre class="console-log">
+        <span class="log-info">[12:00:00] [Main Thread/INFO]: Logging in as... ??</span>
+        <span class="log-info">[12:00:00] [Main Thread/INFO]: Loading world...</span>
+        <span class="log-error">[12:00:01] [Main Thread/ERROR]: Playerdata not in whitelist!</span>
+        <span class="log-error">[12:00:12] [Main Thread/ERROR]: Kicked from server, reason: Unknown player</span>
+      </pre>
     </header>
 
     <main class="rsvp-layout">
       <section class="pixel-card form-card">
-        <h2>填寫回覆</h2>
+        <h2>白名單申請表</h2>
 
         <form id="rsvp-form" novalidate>
-          <fieldset>
-            <legend>出席狀態</legend>
-            <label><input type="radio" name="status" value="attend" required /> 參加</label>
-            <label><input type="radio" name="status" value="decline" /> 無法參加</label>
-          </fieldset>
-
           <div class="form-grid">
+
             <label>
-              帖子/家戶名稱
-              <input name="householdName" type="text" maxlength="80" required />
-            </label>
-            <label>
-              聯絡人姓名
+              /whitelist add {聯絡人姓名}
               <input name="contactName" type="text" maxlength="80" required />
             </label>
+
             <label>
-              聯絡電話
+              /playerdata modify entity @player Contact set {聯絡電話}
               <input name="contactPhone" type="tel" maxlength="20" required />
             </label>
+
             <label>
-              Email
-              <input name="contactEmail" type="email" maxlength="120" />
+              /party create {成人人數}
+              <input name="adultCount" type="number" min="1" max="10" value="1" required />
             </label>
+
             <label>
-              成人人數
-              <input name="adultCount" type="number" min="0" max="20" value="1" required />
-            </label>
-            <label>
-              兒童人數
-              <input name="childCount" type="number" min="0" max="20" value="0" required />
+              /summon villager ~ ~ ~ {Age:-24000} {需要兒童椅的兒童人數}
+              <input name="childCount" type="number" min="0" max="10" value="0" required />
             </label>
           </div>
 
-          <label>
-            同行者姓名（每行一位）
-            <textarea name="guestNames" rows="4" placeholder="例如：\n王小明\n王小華"></textarea>
-          </label>
-
           <div class="form-grid">
             <label>
-              素食份數
+              /give @p minecraft:cooked_carrot {需要素食餐點的人數}
               <input name="vegetarianCount" type="number" min="0" max="20" value="0" required />
-            </label>
-            <label>
-              兒童餐份數
-              <input name="kidsMealCount" type="number" min="0" max="20" value="0" required />
             </label>
           </div>
 
@@ -90,9 +75,6 @@
             <button type="button" class="pixel-btn secondary" id="reset-form">重設</button>
           </div>
         </form>
-
-        <p class="subtitle">請先於首頁輸入入場密碼，再送出本表單。</p>
-        <output class="status" id="submit-status" aria-live="polite"></output>
       </section>
     </main>
 
