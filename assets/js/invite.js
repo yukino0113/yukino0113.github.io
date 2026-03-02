@@ -17,6 +17,7 @@ const digitalContactInput = form?.querySelector('input[name="digitalContact"]');
 const paperAddressInput = form?.querySelector('textarea[name="paperAddress"]');
 const digitalMethodBlock = document.getElementById("digital-method-block");
 const paperAddressBlock = document.getElementById("paper-address-block");
+const loadingOverlay = document.getElementById("loading-overlay");
 
 const step1Data = readStep1Data();
 
@@ -46,6 +47,7 @@ if (!form || !submitStatus || !summaryNode || !inviteRecipientBlock || !inviteRe
 
   form.addEventListener("submit", async (event) => {
     event.preventDefault();
+    let isRedirecting = false;
 
     try {
       if (!step1Data) {
@@ -67,12 +69,14 @@ if (!form || !submitStatus || !summaryNode || !inviteRecipientBlock || !inviteRe
         inviteInfo
       };
 
+      setLoading(true);
       const result = await createRsvp(accessPassword, payload);
       setStatus(submitStatus, result.message || "送出成功", false);
       if (result?.ok) {
         sessionStorage.removeItem(STEP1_KEY);
         sessionStorage.removeItem(STEP2_KEY);
         const submissionId = encodeURIComponent(String(result.submissionId || ""));
+        isRedirecting = true;
         globalThis.location.href = `/submitted.html${submissionId ? `?id=${submissionId}` : ""}`;
         return;
       }
@@ -81,6 +85,10 @@ if (!form || !submitStatus || !summaryNode || !inviteRecipientBlock || !inviteRe
       applyInviteModeVisibility();
     } catch (error) {
       setStatus(submitStatus, error.message, true);
+    } finally {
+      if (!isRedirecting) {
+        setLoading(false);
+      }
     }
   });
 
@@ -251,4 +259,12 @@ function setStatus(node, message, isError) {
   node.textContent = message;
   node.classList.toggle("error", Boolean(isError));
   node.classList.toggle("success", !isError);
+}
+
+function setLoading(isLoading) {
+  if (!loadingOverlay || !form) {
+    return;
+  }
+  loadingOverlay.hidden = !isLoading;
+  setFormDisabled(isLoading);
 }
