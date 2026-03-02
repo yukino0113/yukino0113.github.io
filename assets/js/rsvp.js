@@ -1,4 +1,5 @@
 import { getConfig, validateConfig } from "./app-config.js";
+import { playLogs } from "./log-player.js";
 
 const config = getConfig();
 const PASSWORD_KEY = "WEDDING_ACCESS_PASSWORD";
@@ -41,6 +42,11 @@ if (form && submitStatus) {
 } else {
   console.warn("RSVP form elements not found; rsvp.js initialization skipped.");
 }
+
+playLogs("rsvp", {
+  consoleNode: document.getElementById("page-log"),
+  revealNode: document.querySelector("[data-log-reveal]")
+});
 
 function enforceAccessGate() {
   const accessPassword = String(sessionStorage.getItem(PASSWORD_KEY) || "").trim();

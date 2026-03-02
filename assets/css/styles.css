@@ -52,6 +52,28 @@ body {
   gap: 1rem;
 }
 
+[data-log-reveal] {
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 260ms ease, transform 260ms ease;
+}
+
+[data-log-reveal].is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+[data-log-subtitle] {
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 220ms ease, transform 220ms ease;
+}
+
+[data-log-subtitle].is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
 .home-layout {
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
 }

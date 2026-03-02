@@ -18,10 +18,11 @@
     <header class="site-header pixel-card compact">
       <p class="eyebrow">Submission Complete</p>
       <h1>白名單申請已送出</h1>
-      <p class="subtitle">我們已收到你的回覆，感謝填寫。</p>
+      <pre class="console-log" id="page-log" aria-live="polite"></pre>
+      <p class="subtitle" data-log-subtitle hidden>我們已收到你的回覆，感謝填寫。</p>
     </header>
 
-    <main class="rsvp-layout">
+    <main class="rsvp-layout" data-log-reveal hidden>
       <section class="pixel-card form-card">
         <h2>伺服器連線資訊</h2>
         <dl class="event-meta">
@@ -76,19 +77,6 @@
     </footer>
 
     <script src="/config.js"></script>
-    <script>
-      const footerVersion = document.getElementById("footer-version");
-      const eventDate = document.getElementById("submitted-event-date");
-      const eventPort = document.getElementById("submitted-event-port");
-      if (footerVersion && globalThis.APP_CONFIG?.VERSION) {
-        footerVersion.textContent = globalThis.APP_CONFIG.VERSION;
-      }
-      if (eventDate) {
-        eventDate.textContent = globalThis.APP_CONFIG?.EVENT?.DATE || "-";
-      }
-      if (eventPort) {
-        eventPort.textContent = globalThis.APP_CONFIG?.EVENT?.DEADLINE || "-";
-      }
-    </script>
+    <script type="module" src="/assets/js/submitted.js"></script>
   </body>
 </html>

@@ -17,16 +17,11 @@
     <div class="sky"></div>
     <header class="site-header pixel-card compact">
       <h1>白名單申請資料表（2/2）</h1>
-      <div class="console-log">
-        <span class="log-warn">[12:00:01] [Main Thread/INFO]: Playerdata edit detected</span>
-        <span class="log-info">[12:00:01] [Main Thread/INFO]: Setting server push message</span>
-        <span class="log-info">[12:00:01] [Server]: Hello world!!</span>
-        <span class="log-info">[12:00:01] [Main Thread/INFO]: Sending push message</span>
-        <span class="log-error">[12:08:31] [Main Thread/INFO]: Push message failed: No player contact information</span></div>
-      <p class="subtitle">白名單設定錯誤：尚未設定伺服器推播接收資訊，請繼續填寫資料。</p>
+      <pre class="console-log" id="page-log" aria-live="polite"></pre>
+      <p class="subtitle" data-log-subtitle hidden>白名單設定錯誤：尚未設定伺服器推播接收資訊，請繼續填寫資料。</p>
     </header>
 
-    <main class="rsvp-layout">
+    <main class="rsvp-layout" data-log-reveal hidden>
       <section class="pixel-card form-card">
         <p class="subtitle" id="step1-summary"></p>
         <br />

@@ -1,4 +1,5 @@
 import { getConfig, validateConfig } from "./app-config.js";
+import { playLogs } from "./log-player.js";
 
 const config = getConfig();
 const PASSWORD_KEY = "WEDDING_ACCESS_PASSWORD";
@@ -55,6 +56,11 @@ goRsvpButton.addEventListener("click", (event) => {
     return;
   }
   sessionStorage.setItem(PASSWORD_KEY, value);
+});
+
+playLogs("index", {
+  consoleNode: document.getElementById("page-log"),
+  revealNode: document.querySelector("[data-log-reveal]")
 });
 
 function setAuthStatus(message, isError) {

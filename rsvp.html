@@ -17,16 +17,11 @@
     <div class="sky"></div>
     <header class="site-header pixel-card compact">
       <h1>白名單申請資料表（1/2）</h1>
-      <pre class="console-log">
-        <span class="log-info">[12:00:00] [Main Thread/INFO]: Logging in as... ??</span>
-        <span class="log-info">[12:00:00] [Main Thread/INFO]: Loading world...</span>
-        <span class="log-error">[12:00:01] [Main Thread/ERROR]: Playerdata not in whitelist!</span>
-        <span class="log-error">[12:00:12] [Main Thread/ERROR]: Kicked from server, reason: Unknown player</span>
-      </pre>
-      <p class="subtitle">遊戲伺服器進入錯誤：無已知玩家資料，請填寫後重試，謝謝</p>
+      <pre class="console-log" id="page-log" aria-live="polite"></pre>
+      <p class="subtitle" data-log-subtitle hidden>遊戲伺服器進入錯誤：無已知玩家資料，請填寫後重試，謝謝</p>
     </header>
 
-    <main class="rsvp-layout">
+    <main class="rsvp-layout" data-log-reveal hidden>
       <section class="pixel-card form-card">
         <h2>白名單基本資料</h2>
 

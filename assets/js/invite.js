@@ -1,5 +1,6 @@
 import { getConfig, validateConfig } from "./app-config.js";
 import { createRsvp } from "./api.js";
+import { playLogs } from "./log-player.js";
 
 const config = getConfig();
 const PASSWORD_KEY = "WEDDING_ACCESS_PASSWORD";
@@ -114,6 +115,11 @@ if (!form || !submitStatus || !summaryNode || !inviteRecipientBlock || !inviteRe
     }, 1000);
   }
 }
+
+playLogs("invite", {
+  consoleNode: document.getElementById("page-log"),
+  revealNode: document.querySelector("[data-log-reveal]")
+});
 
 function enforceAccessGate() {
   const accessPassword = String(sessionStorage.getItem(PASSWORD_KEY) || "").trim();
