@@ -23,7 +23,7 @@ if (configErrors.length) {
 const savedPassword = sessionStorage.getItem(PASSWORD_KEY) || "";
 if (savedPassword && savedPassword === config.WEDDING_ACCESS_PASSWORD) {
   passwordInput.value = savedPassword;
-  setAuthStatus("密碼驗證通過，可前往填寫", false);
+  setAuthStatus("密碼驗證通過，可前往下一頁", false);
 } else {
   sessionStorage.removeItem(PASSWORD_KEY);
   setAuthStatus("請輸入正確入場密碼", true);
@@ -33,7 +33,7 @@ passwordInput.addEventListener("input", () => {
   const value = String(passwordInput.value || "").trim();
   if (!value) {
     sessionStorage.removeItem(PASSWORD_KEY);
-    setAuthStatus("請輸入入場密碼", true);
+    setAuthStatus("請輸入登入密碼", true);
     return;
   }
 
@@ -44,7 +44,7 @@ passwordInput.addEventListener("input", () => {
   }
 
   sessionStorage.setItem(PASSWORD_KEY, value);
-  setAuthStatus("密碼驗證通過，可前往填寫", false);
+  setAuthStatus("密碼驗證通過，可前往下一頁", false);
 });
 
 goRsvpButton.addEventListener("click", (event) => {

@@ -18,7 +18,7 @@
     <header class="site-header pixel-card compact">
       <h1>白名單申請（2/2）</h1>
       <pre class="console-log" id="page-log" aria-live="polite"></pre>
-      <p class="subtitle" data-log-subtitle hidden>白名單設定錯誤：尚未設定伺服器推播接收資訊，請繼續填寫資料。</p>
+      <p class="subtitle" data-log-subtitle hidden>白名單設定錯誤：尚未設定伺服器推播接收資訊，請繼續填寫資料</p>
     </header>
 
     <main class="rsvp-layout" data-log-reveal hidden>
@@ -83,12 +83,13 @@
           <span></span>
           <span></span>
         </div>
-        <p class="loading-text">正在把白名單資料寫入 whitelist.json</p>
+        <p class="loading-text">正在把 playerData 寫入 whitelist.json</p>
       </div>
     </div>
 
-    <footer class="site-footer">
+    <footer class="site-footer" data-log-finish hidden>
       <p id="footer-version">Version</p>
+      <p class="author">Author: Jethro Conde Lim (Yukino)</p>
     </footer>
 
     <script src="/config.js"></script>

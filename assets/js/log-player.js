@@ -4,6 +4,7 @@ export async function playLogs(pageKey, options = {}) {
   const consoleNode = options.consoleNode || document.querySelector(".console-log");
   const revealNode = options.revealNode || document.querySelector("[data-log-reveal]");
   const subtitleNode = options.subtitleNode || document.querySelector("[data-log-subtitle]");
+  const finishNode = options.finishNode || document.querySelector("[data-log-finish]");
 
   if (!consoleNode || !revealNode) {
     return;
@@ -17,10 +18,15 @@ export async function playLogs(pageKey, options = {}) {
     subtitleNode.hidden = true;
     subtitleNode.classList.remove("is-visible");
   }
+  if (finishNode) {
+    finishNode.hidden = true;
+    finishNode.classList.remove("is-visible");
+  }
 
   if (!logs.length) {
     revealWithFade(revealNode);
     revealWithFade(subtitleNode);
+    revealWithFade(finishNode);
     return;
   }
 
@@ -39,12 +45,13 @@ export async function playLogs(pageKey, options = {}) {
     revealWithFade(revealNode);
   }
   revealWithFade(subtitleNode);
+  revealWithFade(finishNode);
 }
 
 function appendLine(consoleNode, line, level) {
   const row = document.createElement("span");
   row.className = levelClass(level);
-  row.textContent = line;
+  row.textContent = withRealtimeTimestamp(line);
   consoleNode.appendChild(row);
 }
 
@@ -90,4 +97,26 @@ function revealWithFade(node) {
   globalThis.requestAnimationFrame(() => {
     node.classList.add("is-visible");
   });
+}
+
+function withRealtimeTimestamp(line) {
+  const current = `[${formatNowTaipei()}]`;
+  const text = String(line || "").trim();
+  if (!text) {
+    return current;
+  }
+  if (/^\[[^\]]+\]/.test(text)) {
+    return text.replace(/^\[[^\]]+\]/, current);
+  }
+  return `${current} ${text}`;
+}
+
+function formatNowTaipei() {
+  return new Intl.DateTimeFormat("zh-TW", {
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+    hour12: false,
+    timeZone: "Asia/Taipei"
+  }).format(new Date());
 }

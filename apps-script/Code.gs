@@ -3,20 +3,21 @@ const RSVP_SHEET = "rsvps";
 const CONFIG_SHEET = "config";
 const RSVP_HEADERS = [
   "submission_id",
-  "created_at",
-  "status",
-  "contact_name",
-  "contact_phone",
-  "guest_count_adult",
-  "guest_count_child",
-  "vegetarianCount",
-  "special_needs",
-  "message",
-  "invite_mode",
-  "invite_recipient_name",
-  "digital_method",
-  "digital_contact",
-  "paper_address"
+  "填表時間",
+  "狀態",
+  "聯絡人",
+  "聯絡點話",
+  "大人數量",
+  "孩童數量",
+  "素食數量",
+  "特殊需求",
+  "活動許願",
+  "祝福留言",
+  "喜帖接收方式",
+  "收件人",
+  "電子接收途徑",
+  "電子喜帖接收位置",
+  "地址"
 ];
 
 function doGet() {
@@ -62,23 +63,44 @@ function handleCreate_(payload) {
 
   const inviteInfo = payload.inviteInfo || {};
   const mealPreference = payload.mealPreference || {};
+  const status = String(payload.status || "").trim();
+  const contactPhone = String(payload.contactPhone || "");
+  const adultCount = num_(payload.guestCountAdult);
+  const childCount = num_(payload.guestCountChild);
+  const vegetarianCount = num_(mealPreference.vegetarianCount);
   const record = {
     submission_id: submissionId,
     created_at: nowIso,
-    status: String(payload.status || "").trim(),
+    status: status,
     contact_name: payload.contactName,
     // Preserve leading zeros in Google Sheets.
-    contact_phone: "'" + String(payload.contactPhone || ""),
-    guest_count_adult: num_(payload.guestCountAdult),
-    guest_count_child: num_(payload.guestCountChild),
-    vegetarianCount: num_(mealPreference.vegetarianCount),
+    contact_phone: "'" + contactPhone,
+    guest_count_adult: adultCount,
+    guest_count_child: childCount,
+    vegetarianCount: vegetarianCount,
     special_needs: payload.specialNeeds || "",
+    activity_wish: payload.activityWish || "",
     message: payload.message || "",
     invite_mode: inviteInfo.inviteMode || "",
     invite_recipient_name: inviteInfo.inviteRecipientName || "",
     digital_method: inviteInfo.digitalMethod || "",
     digital_contact: inviteInfo.digitalContact || "",
-    paper_address: inviteInfo.paperAddress || ""
+    paper_address: inviteInfo.paperAddress || "",
+    "填表時間": nowIso,
+    "狀態": status,
+    "聯絡人": payload.contactName,
+    "聯絡點話": "'" + contactPhone,
+    "大人數量": adultCount,
+    "孩童數量": childCount,
+    "素食數量": vegetarianCount,
+    "特殊需求": payload.specialNeeds || "",
+    "活動許願": payload.activityWish || "",
+    "祝福留言": payload.message || "",
+    "喜帖接收方式": inviteInfo.inviteMode || "",
+    "收件人": inviteInfo.inviteRecipientName || "",
+    "電子接收途徑": inviteInfo.digitalMethod || "",
+    "電子喜帖接收位置": inviteInfo.digitalContact || "",
+    "地址": inviteInfo.paperAddress || ""
   };
   const row = headers.map(function (header) {
     return Object.prototype.hasOwnProperty.call(record, header) ? record[header] : "";

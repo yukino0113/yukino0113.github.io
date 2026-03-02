@@ -91,6 +91,7 @@ function buildStep1Data() {
       vegetarianCount
     },
     specialNeeds: getTextField(data, "specialNeeds"),
+    activityWish: getTextField(data, "activityWish"),
     message: getTextField(data, "message")
   };
 }
@@ -114,6 +115,7 @@ function restoreStep1Draft() {
   form.childCount.value = draft.guestCountChild ?? 0;
   form.vegetarianCount.value = draft.mealPreference?.vegetarianCount ?? 0;
   form.specialNeeds.value = draft.specialNeeds || "";
+  form.activityWish.value = draft.activityWish || "";
   form.message.value = draft.message || "";
 }
 

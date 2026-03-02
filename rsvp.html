@@ -56,13 +56,23 @@
           </div>
 
           <label>
-            特殊需求
-            <textarea name="specialNeeds" rows="3" maxlength="400"></textarea>
+            /status report {特殊需求}
+            <textarea name="specialNeeds" placeholder="其他任何希望我們知道或協助的事項" rows="3" maxlength="400"></textarea>
           </label>
 
           <label>
-            祝福留言
-            <textarea name="message" rows="3" maxlength="400"></textarea>
+            /quest suggest {您有希望會場上有什麼活動}
+            <textarea
+              name="activityWish"
+              rows="3"
+              maxlength="400"
+              placeholder="Kahoot 問答、猜歌、音樂遊戲遊玩(X)"
+            ></textarea>
+          </label>
+
+          <label>
+            /msg &lt;couple&gt; {祝福留言}
+            <textarea name="message" rows="3" placeholder="想對我們說的話（可以很短，也可以很長）" maxlength="400"></textarea>
           </label>
 
           <div class="actions">
@@ -74,8 +84,9 @@
       </section>
     </main>
 
-    <footer class="site-footer">
+    <footer class="site-footer" data-log-finish hidden>
       <p id="footer-version">Version</p>
+      <p class="author">Author: Jethro Conde Lim (Yukino)</p>
     </footer>
 
     <script src="/config.js"></script>
