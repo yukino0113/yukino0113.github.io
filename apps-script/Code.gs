@@ -6,10 +6,9 @@ const RSVP_HEADERS = [
   "created_at",
   "contact_name",
   "contact_phone",
-  "contact_email",
   "guest_count_adult",
   "guest_count_child",
-  "meal_preference_json",
+  "vegetarianCount",
   "special_needs",
   "message",
   "invite_mode",
@@ -68,12 +67,9 @@ function handleCreate_(payload) {
     contact_name: payload.contactName,
     // Preserve leading zeros in Google Sheets.
     contact_phone: "'" + String(payload.contactPhone || ""),
-    contact_email: payload.contactEmail || "",
     guest_count_adult: num_(payload.guestCountAdult),
     guest_count_child: num_(payload.guestCountChild),
-    meal_preference_json: stringifyJson_({
-      vegetarianCount: num_(mealPreference.vegetarianCount)
-    }),
+    vegetarianCount: num_(mealPreference.vegetarianCount),
     special_needs: payload.specialNeeds || "",
     message: payload.message || "",
     invite_mode: inviteInfo.inviteMode || "",
@@ -222,15 +218,11 @@ function ensureRsvpHeaders_(sheet) {
     sheet.getRange(1, 1, 1, RSVP_HEADERS.length).setValues([RSVP_HEADERS]);
     return RSVP_HEADERS.slice();
   }
-
-  RSVP_HEADERS.forEach(function (required) {
-    if (!headers.includes(required)) {
-      headers.push(required);
-    }
-  });
-
-  sheet.getRange(1, 1, 1, headers.length).setValues([headers]);
-  return headers;
+  sheet.getRange(1, 1, 1, RSVP_HEADERS.length).setValues([RSVP_HEADERS]);
+  if (lastCol > RSVP_HEADERS.length) {
+    sheet.getRange(1, RSVP_HEADERS.length + 1, 1, lastCol - RSVP_HEADERS.length).clearContent();
+  }
+  return RSVP_HEADERS.slice();
 }
 
 function getSheet_(name) {
@@ -247,10 +239,6 @@ function nowIso_() {
 
 function generateSubmissionId_() {
   return "FORM-" + Utilities.formatDate(new Date(), TZ, "yyyyMMdd") + "-" + Utilities.getUuid().slice(0, 8);
-}
-
-function stringifyJson_(value) {
-  return JSON.stringify(value || {});
 }
 
 function num_(value) {

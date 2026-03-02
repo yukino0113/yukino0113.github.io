@@ -78,7 +78,6 @@ function buildStep1Data() {
   return {
     contactName,
     contactPhone,
-    contactEmail: "",
     guestCountAdult: adultCount,
     guestCountChild: childCount,
     mealPreference: {
