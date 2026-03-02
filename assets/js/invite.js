@@ -18,6 +18,7 @@ const paperAddressInput = form?.querySelector('textarea[name="paperAddress"]');
 const digitalMethodBlock = document.getElementById("digital-method-block");
 const paperAddressBlock = document.getElementById("paper-address-block");
 const loadingOverlay = document.getElementById("loading-overlay");
+const submitButton = form?.querySelector('button[type="submit"]');
 
 const step1Data = readStep1Data();
 let isSubmitting = false;
@@ -30,6 +31,12 @@ if (footerVersion) {
 if (!form || !submitStatus || !summaryNode || !inviteRecipientBlock || !inviteRecipientInput || !digitalContactInput || !paperAddressInput || !digitalMethodBlock || !paperAddressBlock) {
   console.warn("Invite form elements not found; invite.js initialization skipped.");
 } else {
+  setLoading(false);
+  globalThis.addEventListener("pageshow", () => {
+    isSubmitting = false;
+    setLoading(false);
+  });
+
   const configErrors = validateConfig();
   if (configErrors.length) {
     setStatus(submitStatus, configErrors.join("；"), true);
@@ -37,73 +44,75 @@ if (!form || !submitStatus || !summaryNode || !inviteRecipientBlock || !inviteRe
 
   enforceAccessGate();
   if (step1Data) {
-    summaryNode.textContent = `已載入：${step1Data.contactName} / ${step1Data.contactPhone} / 成人人數 ${step1Data.guestCountAdult}`;
+    summaryNode.textContent = `已暫存玩家資料：${step1Data.contactName} / ${step1Data.contactPhone} / 成人人數 ${step1Data.guestCountAdult} / 小孩人數 ${step1Data.guestCountChild}`;
+    bindInviteModeEvents();
+    restoreStep2Draft();
+
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      if (isSubmitting) {
+        return;
+      }
+      let isRedirecting = false;
+
+      try {
+        if (!step1Data) {
+          setStatus(submitStatus, "找不到第一步資料，請返回上一頁重新填寫", true);
+          return;
+        }
+
+        const accessPassword = String(sessionStorage.getItem(PASSWORD_KEY) || "").trim();
+        if (!accessPassword || accessPassword !== config.WEDDING_ACCESS_PASSWORD) {
+          setStatus(submitStatus, "請先回首頁輸入正確入場密碼", true);
+          return;
+        }
+
+        const inviteInfo = buildInviteInfo();
+        saveStep2Draft(inviteInfo);
+
+        const payload = {
+          ...step1Data,
+          status: step1Data?.status === "decline" ? "decline" : "attend",
+          inviteInfo
+        };
+
+        isSubmitting = true;
+        setLoading(true);
+        const result = await createRsvp(accessPassword, payload);
+        setStatus(submitStatus, result.message || "送出成功", false);
+        if (result?.ok) {
+          sessionStorage.removeItem(STEP1_KEY);
+          sessionStorage.removeItem(STEP2_KEY);
+          const submissionId = encodeURIComponent(String(result.submissionId || ""));
+          isRedirecting = true;
+          globalThis.location.href = `/submitted.html${submissionId ? `?id=${submissionId}` : ""}`;
+          return;
+        }
+
+        form.reset();
+        applyInviteModeVisibility();
+      } catch (error) {
+        setStatus(submitStatus, error.message, true);
+      } finally {
+        isSubmitting = false;
+        if (!isRedirecting) {
+          setLoading(false);
+        }
+      }
+    });
+
+    document.getElementById("back-to-rsvp").addEventListener("click", () => {
+      const draft = collectInviteDraft();
+      saveStep2Draft(draft);
+      globalThis.location.href = "/rsvp.html";
+    });
   } else {
     setFormDisabled(true);
-    setStatus(submitStatus, "找不到第一步資料，請返回上一頁重新填寫", true);
+    setStatus(submitStatus, "找不到第一步資料，1 秒後返回上一頁", true);
+    globalThis.setTimeout(() => {
+      globalThis.location.href = "/rsvp.html";
+    }, 1000);
   }
-
-  bindInviteModeEvents();
-  restoreStep2Draft();
-
-  form.addEventListener("submit", async (event) => {
-    event.preventDefault();
-    if (isSubmitting) {
-      return;
-    }
-    let isRedirecting = false;
-
-    try {
-      if (!step1Data) {
-        setStatus(submitStatus, "找不到第一步資料，請返回上一頁重新填寫", true);
-        return;
-      }
-
-      const accessPassword = String(sessionStorage.getItem(PASSWORD_KEY) || "").trim();
-      if (!accessPassword || accessPassword !== config.WEDDING_ACCESS_PASSWORD) {
-        setStatus(submitStatus, "請先回首頁輸入正確入場密碼", true);
-        return;
-      }
-
-      const inviteInfo = buildInviteInfo();
-      saveStep2Draft(inviteInfo);
-
-      const payload = {
-        ...step1Data,
-        status: step1Data?.status === "decline" ? "decline" : "attend",
-        inviteInfo
-      };
-
-      isSubmitting = true;
-      setLoading(true);
-      const result = await createRsvp(accessPassword, payload);
-      setStatus(submitStatus, result.message || "送出成功", false);
-      if (result?.ok) {
-        sessionStorage.removeItem(STEP1_KEY);
-        sessionStorage.removeItem(STEP2_KEY);
-        const submissionId = encodeURIComponent(String(result.submissionId || ""));
-        isRedirecting = true;
-        globalThis.location.href = `/submitted.html${submissionId ? `?id=${submissionId}` : ""}`;
-        return;
-      }
-
-      form.reset();
-      applyInviteModeVisibility();
-    } catch (error) {
-      setStatus(submitStatus, error.message, true);
-    } finally {
-      isSubmitting = false;
-      if (!isRedirecting) {
-        setLoading(false);
-      }
-    }
-  });
-
-  document.getElementById("back-to-rsvp").addEventListener("click", () => {
-    const draft = collectInviteDraft();
-    saveStep2Draft(draft);
-    globalThis.location.href = "/rsvp.html";
-  });
 }
 
 function enforceAccessGate() {
@@ -112,7 +121,9 @@ function enforceAccessGate() {
   if (!valid) {
     setFormDisabled(true);
     setStatus(submitStatus, "請先回首頁輸入正確入場密碼後，再填寫表單", true);
+    return;
   }
+  setFormDisabled(false);
 }
 
 function readStep1Data() {
@@ -274,4 +285,7 @@ function setLoading(isLoading) {
   }
   loadingOverlay.hidden = !isLoading;
   setFormDisabled(isLoading);
+  if (submitButton) {
+    submitButton.textContent = isLoading ? "送出中..." : "送出回覆";
+  }
 }

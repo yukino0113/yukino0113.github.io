@@ -23,15 +23,19 @@
 
     <main class="rsvp-layout">
       <section class="pixel-card form-card">
-        <h2>婚宴地點資訊</h2>
+        <h2>伺服器連線資訊</h2>
         <dl class="event-meta">
           <div>
-            <dt>地點</dt>
-            <dd>台南晶英酒店</dd>
+            <dt>開服日期</dt>
+            <dd id="submitted-event-date">-</dd>
           </div>
           <div>
-            <dt>地址</dt>
-            <dd>臺南市中西區和意路 1 號</dd>
+            <dt>伺服器 IP</dt>
+            <dd>台南晶英酒店（臺南市中西區和意路 1 號）</dd>
+          </div>
+          <div>
+            <dt>Port</dt>
+            <dd id="submitted-event-port">-</dd>
           </div>
           <div>
             <dt>地圖</dt>
@@ -49,10 +53,11 @@
       </section>
 
       <section class="pixel-card form-card">
-        <h2>交通方式</h2>
+        <h2>連線方式</h2>
         <h3>開車前往</h3>
         <p>
           導航可直接輸入「台南晶英酒店」或完整地址「臺南市中西區和意路 1 號」。建議提早出發，並預留市區停車與進場時間。
+          <br /> 汽車提供免費停車四小時，請至收禮處填寫車號資訊。
         </p>
 
         <h3>大眾交通</h3>
@@ -73,8 +78,16 @@
     <script src="/config.js"></script>
     <script>
       const footerVersion = document.getElementById("footer-version");
+      const eventDate = document.getElementById("submitted-event-date");
+      const eventPort = document.getElementById("submitted-event-port");
       if (footerVersion && globalThis.APP_CONFIG?.VERSION) {
         footerVersion.textContent = globalThis.APP_CONFIG.VERSION;
+      }
+      if (eventDate) {
+        eventDate.textContent = globalThis.APP_CONFIG?.EVENT?.DATE || "-";
+      }
+      if (eventPort) {
+        eventPort.textContent = globalThis.APP_CONFIG?.EVENT?.DEADLINE || "-";
       }
     </script>
   </body>

@@ -17,19 +17,24 @@
     <div class="sky"></div>
     <header class="site-header pixel-card compact">
       <h1>白名單申請資料表（2/2）</h1>
-      <p class="subtitle">設定伺服器推播（喜帖）接收方式，完成後即可送出。</p>
+      <div class="console-log">
+        <span class="log-warn">[12:00:01] [Main Thread/INFO]: Playerdata edit detected</span>
+        <span class="log-info">[12:00:01] [Main Thread/INFO]: Setting server push message</span>
+        <span class="log-info">[12:00:01] [Server]: Hello world!!</span>
+        <span class="log-info">[12:00:01] [Main Thread/INFO]: Sending push message</span>
+        <span class="log-error">[12:08:31] [Main Thread/INFO]: Push message failed: No player contact information</span></div>
+      <p class="subtitle">白名單設定錯誤：尚未設定伺服器推播接收資訊，請繼續填寫資料。</p>
     </header>
 
     <main class="rsvp-layout">
       <section class="pixel-card form-card">
-        <h2>伺服器資訊推播資訊</h2>
         <p class="subtitle" id="step1-summary"></p>
-
+        <br />
         <form id="invite-form" novalidate>
           <fieldset>
             <legend class="section-legend">伺服器推播（喜帖）接受方式</legend>
             <label class="radio-option"><input type="radio" name="inviteMode" value="digital" required /> 雲端電子公告（透過紅石傳送）</label>
-            <label class="radio-option"><input type="radio" name="inviteMode" value="paper" /> 紙本說明 （透過我們在 overworld 的 Enderman 傳送）</label>
+            <label class="radio-option"><input type="radio" name="inviteMode" value="paper" /> 紙本說明 （會透過我們在 overworld 聘雇的 Enderman 傳送）</label>
             <label class="radio-option"><input type="radio" name="inviteMode" value="both" /> 兩者都要！</label>
             <label class="radio-option">
               <input type="radio" name="inviteMode" value="none" />
@@ -41,7 +46,7 @@
             <h3>收件人資訊</h3>
             <label>
               收件人姓名
-              <input name="inviteRecipientName" type="text" maxlength="80" />
+              <input name="inviteRecipientName" type="text" placeholder="Enderman 不會與您核對姓名，請確實填寫以免喜帖送錯人！" maxlength="80" />
             </label>
           </div>
 
@@ -60,7 +65,7 @@
             <h3>紙本喜帖寄送地址</h3>
             <label>
               收件地址
-              <textarea name="paperAddress" rows="3" maxlength="240" placeholder="請填寫完整郵遞區號與地址"></textarea>
+              <textarea name="paperAddress" rows="3" maxlength="240" placeholder="為了避免 Enderman 投遞錯誤被關進安德塔，請填寫完整郵遞區號與地址"></textarea>
             </label>
           </div>
 
