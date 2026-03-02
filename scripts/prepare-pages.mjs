@@ -10,6 +10,7 @@ const entries = [
   "index.html",
   "rsvp.html",
   "invite.html",
+  "submitted.html",
   "config.js",
   "assets"
 ];

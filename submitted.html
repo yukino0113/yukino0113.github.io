@@ -15,9 +15,67 @@
   </head>
   <body>
     <div class="sky"></div>
+    <header class="site-header pixel-card compact">
+      <p class="eyebrow">Submission Complete</p>
+      <h1>白名單申請已送出</h1>
+      <p class="subtitle">我們已收到你的回覆，感謝填寫。</p>
+    </header>
+
     <main class="rsvp-layout">
       <section class="pixel-card form-card">
+        <h2>婚宴地點資訊</h2>
+        <dl class="event-meta">
+          <div>
+            <dt>地點</dt>
+            <dd>台南晶英酒店</dd>
+          </div>
+          <div>
+            <dt>地址</dt>
+            <dd>臺南市中西區和意路 1 號</dd>
+          </div>
+          <div>
+            <dt>地圖</dt>
+            <dd>
+              <a
+                class="text-link"
+                href="https://maps.google.com/?q=%E5%8F%B0%E5%8D%97%E6%99%B6%E8%8B%B1%E9%85%92%E5%BA%97+%E8%87%BA%E5%8D%97%E5%B8%82%E4%B8%AD%E8%A5%BF%E5%8D%80%E5%92%8C%E6%84%8F%E8%B7%AF1%E8%99%9F"
+                target="_blank"
+                rel="noopener noreferrer"
+                >開啟 Google Maps</a
+              >
+            </dd>
+          </div>
+        </dl>
+      </section>
+
+      <section class="pixel-card form-card">
+        <h2>交通方式</h2>
+        <h3>開車前往</h3>
+        <p>
+          導航可直接輸入「台南晶英酒店」或完整地址「臺南市中西區和意路 1 號」。建議提早出發，並預留市區停車與進場時間。
+        </p>
+
+        <h3>大眾交通</h3>
+        <p>
+          可先搭乘高鐵至台南站或台鐵至台南車站，再轉乘計程車、公車或其他接駁方式前往飯店。若同行有長輩，建議優先使用計程車以減少步行距離。
+        </p>
+
+        <div class="actions">
+          <a class="pixel-btn secondary" href="/index.html">返回首頁</a>
+        </div>
       </section>
     </main>
+
+    <footer class="site-footer">
+      <p id="footer-version">Version</p>
+    </footer>
+
+    <script src="/config.js"></script>
+    <script>
+      const footerVersion = document.getElementById("footer-version");
+      if (footerVersion && globalThis.APP_CONFIG?.VERSION) {
+        footerVersion.textContent = globalThis.APP_CONFIG.VERSION;
+      }
+    </script>
   </body>
 </html>

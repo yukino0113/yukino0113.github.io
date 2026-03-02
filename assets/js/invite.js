@@ -20,6 +20,7 @@ const paperAddressBlock = document.getElementById("paper-address-block");
 const loadingOverlay = document.getElementById("loading-overlay");
 
 const step1Data = readStep1Data();
+let isSubmitting = false;
 
 const footerVersion = document.getElementById("footer-version");
 if (footerVersion) {
@@ -47,6 +48,9 @@ if (!form || !submitStatus || !summaryNode || !inviteRecipientBlock || !inviteRe
 
   form.addEventListener("submit", async (event) => {
     event.preventDefault();
+    if (isSubmitting) {
+      return;
+    }
     let isRedirecting = false;
 
     try {
@@ -66,9 +70,11 @@ if (!form || !submitStatus || !summaryNode || !inviteRecipientBlock || !inviteRe
 
       const payload = {
         ...step1Data,
+        status: step1Data?.status === "decline" ? "decline" : "attend",
         inviteInfo
       };
 
+      isSubmitting = true;
       setLoading(true);
       const result = await createRsvp(accessPassword, payload);
       setStatus(submitStatus, result.message || "送出成功", false);
@@ -86,6 +92,7 @@ if (!form || !submitStatus || !summaryNode || !inviteRecipientBlock || !inviteRe
     } catch (error) {
       setStatus(submitStatus, error.message, true);
     } finally {
+      isSubmitting = false;
       if (!isRedirecting) {
         setLoading(false);
       }

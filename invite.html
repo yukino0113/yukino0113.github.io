@@ -74,16 +74,16 @@
       </section>
     </main>
 
-    <div class="loading-overlay" id="loading-overlay" hidden aria-live="polite" aria-busy="true">
-      <div class="loading-panel pixel-card" role="status" aria-label="送出中">
-        <p class="loading-title">儲存中...</p>
+    <div class="loading-overlay" id="loading-overlay" hidden aria-busy="true">
+      <div class="loading-panel pixel-card">
+        <output class="loading-title" aria-live="polite">儲存中...</output>
         <div class="loading-blocks" aria-hidden="true">
           <span></span>
           <span></span>
           <span></span>
           <span></span>
         </div>
-        <p class="loading-text">正在把白名單資料寫入伺服器</p>
+        <p class="loading-text">正在把白名單資料寫入 whitelist.json</p>
       </div>
     </div>
 
