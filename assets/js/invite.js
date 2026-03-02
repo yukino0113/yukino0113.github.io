@@ -64,10 +64,7 @@ if (!form || !submitStatus || !summaryNode || !inviteRecipientBlock || !inviteRe
 
       const payload = {
         ...step1Data,
-        status: "attend",
-        specialNeeds: mergeSpecialNeeds(step1Data.specialNeeds || "", inviteInfo),
-        source: "github-pages",
-        version: config.VERSION || "v1.2.1"
+        inviteInfo
       };
 
       const result = await createRsvp(accessPassword, payload);
@@ -236,14 +233,6 @@ function restoreStep2Draft() {
 function getTextField(formData, key) {
   const value = formData.get(key);
   return typeof value === "string" ? value.trim() : "";
-}
-
-function mergeSpecialNeeds(specialNeeds, inviteInfo) {
-  const inviteSummary = `推播資訊: ${JSON.stringify(inviteInfo)}`;
-  if (!specialNeeds) {
-    return inviteSummary;
-  }
-  return `${specialNeeds}\n${inviteSummary}`;
 }
 
 function setFormDisabled(disabled) {

@@ -76,23 +76,16 @@ function buildStep1Data() {
   }
 
   return {
-    status: "attend",
-    householdName: contactName,
     contactName,
     contactPhone,
     contactEmail: "",
     guestCountAdult: adultCount,
     guestCountChild: childCount,
-    guestNames: [],
     mealPreference: {
-      vegetarianCount,
-      kidsMealCount: 0
+      vegetarianCount
     },
     specialNeeds: getTextField(data, "specialNeeds"),
-    message: getTextField(data, "message"),
-    phoneLast4: readPhoneLast4(contactPhone),
-    source: "github-pages",
-    version: config.VERSION || "v1.2.1"
+    message: getTextField(data, "message")
   };
 }
 
@@ -121,14 +114,6 @@ function restoreStep1Draft() {
 function toSafeInt(value) {
   const num = Number.parseInt(String(value || "0"), 10);
   return Number.isFinite(num) ? Math.max(0, num) : 0;
-}
-
-function readPhoneLast4(value) {
-  const digits = String(value || "").replaceAll(/\D/g, "");
-  if (digits.length < 4) {
-    throw new Error("電話需至少 4 碼");
-  }
-  return digits.slice(-4);
 }
 
 function getTextField(formData, key) {

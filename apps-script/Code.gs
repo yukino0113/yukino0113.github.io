@@ -4,21 +4,19 @@ const CONFIG_SHEET = "config";
 const RSVP_HEADERS = [
   "submission_id",
   "created_at",
-  "updated_at",
-  "status",
-  "household_name",
   "contact_name",
   "contact_phone",
   "contact_email",
   "guest_count_adult",
   "guest_count_child",
-  "guest_names_json",
   "meal_preference_json",
   "special_needs",
   "message",
-  "last4_phone",
-  "source",
-  "version"
+  "invite_mode",
+  "invite_recipient_name",
+  "digital_method",
+  "digital_contact",
+  "paper_address"
 ];
 
 function doGet() {
@@ -58,28 +56,35 @@ function handleCreate_(payload) {
   validateGuestLimit_(payload, cfg);
 
   const sheet = getSheet_(RSVP_SHEET);
+  const headers = ensureRsvpHeaders_(sheet);
   const nowIso = nowIso_();
   const submissionId = generateSubmissionId_();
 
-  const row = [
-    submissionId,
-    nowIso,
-    nowIso,
-    payload.status,
-    payload.householdName,
-    payload.contactName,
-    payload.contactPhone,
-    payload.contactEmail || "",
-    num_(payload.guestCountAdult),
-    num_(payload.guestCountChild),
-    stringifyJson_(payload.guestNames || []),
-    stringifyJson_(payload.mealPreference || {}),
-    payload.specialNeeds || "",
-    payload.message || "",
-    payload.phoneLast4,
-    payload.source || "github-pages",
-    payload.version || "v1.2.1"
-  ];
+  const inviteInfo = payload.inviteInfo || {};
+  const mealPreference = payload.mealPreference || {};
+  const record = {
+    submission_id: submissionId,
+    created_at: nowIso,
+    contact_name: payload.contactName,
+    // Preserve leading zeros in Google Sheets.
+    contact_phone: "'" + String(payload.contactPhone || ""),
+    contact_email: payload.contactEmail || "",
+    guest_count_adult: num_(payload.guestCountAdult),
+    guest_count_child: num_(payload.guestCountChild),
+    meal_preference_json: stringifyJson_({
+      vegetarianCount: num_(mealPreference.vegetarianCount)
+    }),
+    special_needs: payload.specialNeeds || "",
+    message: payload.message || "",
+    invite_mode: inviteInfo.inviteMode || "",
+    invite_recipient_name: inviteInfo.inviteRecipientName || "",
+    digital_method: inviteInfo.digitalMethod || "",
+    digital_contact: inviteInfo.digitalContact || "",
+    paper_address: inviteInfo.paperAddress || ""
+  };
+  const row = headers.map(function (header) {
+    return Object.prototype.hasOwnProperty.call(record, header) ? record[header] : "";
+  });
 
   sheet.appendRow(row);
 
@@ -124,16 +129,8 @@ function verifyAccessPassword_(accessPassword) {
 }
 
 function validateBasePayload_(payload) {
-  if (!payload || !["attend", "decline"].includes(payload.status)) {
-    throw createError_("INVALID_INPUT", "status 必須是 attend 或 decline");
-  }
-
-  if (!payload.householdName || !payload.contactName || !payload.contactPhone) {
-    throw createError_("INVALID_INPUT", "householdName/contactName/contactPhone 為必填");
-  }
-
-  if (!payload.phoneLast4 || String(payload.phoneLast4).length !== 4) {
-    throw createError_("INVALID_INPUT", "phoneLast4 必須是 4 碼");
+  if (!payload || !payload.contactName || !payload.contactPhone) {
+    throw createError_("INVALID_INPUT", "contactName/contactPhone 為必填");
   }
 
   const adult = num_(payload.guestCountAdult);
@@ -196,6 +193,8 @@ function ensureSheets_() {
   }
   if (rsvp.getLastRow() === 0) {
     rsvp.appendRow(RSVP_HEADERS);
+  } else {
+    ensureRsvpHeaders_(rsvp);
   }
 
   let config = ss.getSheetByName(CONFIG_SHEET);
@@ -210,6 +209,28 @@ function ensureSheets_() {
     config.appendRow(["max_guest_per_household", "10"]);
     config.appendRow(["sheet_version", "v1.2.1"]);
   }
+}
+
+function ensureRsvpHeaders_(sheet) {
+  const lastCol = Math.max(sheet.getLastColumn(), 1);
+  let headers = sheet.getRange(1, 1, 1, lastCol).getValues()[0];
+  headers = headers.map(function (h) {
+    return String(h || "").trim();
+  });
+
+  if (headers.length === 1 && headers[0] === "") {
+    sheet.getRange(1, 1, 1, RSVP_HEADERS.length).setValues([RSVP_HEADERS]);
+    return RSVP_HEADERS.slice();
+  }
+
+  RSVP_HEADERS.forEach(function (required) {
+    if (!headers.includes(required)) {
+      headers.push(required);
+    }
+  });
+
+  sheet.getRange(1, 1, 1, headers.length).setValues([headers]);
+  return headers;
 }
 
 function getSheet_(name) {
