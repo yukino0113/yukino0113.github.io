@@ -8,9 +8,8 @@ async function callApi(action, accessPassword, payload) {
 
   const response = await fetch(APPS_SCRIPT_URL, {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
+    // Avoid CORS preflight for Apps Script web app.
+    // Sending a plain string body keeps this as a simple request.
     body: JSON.stringify({ action, accessPassword, payload })
   });
 
