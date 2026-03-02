@@ -76,6 +76,7 @@ function buildStep1Data() {
   }
 
   return {
+    status: "attend",
     contactName,
     contactPhone,
     guestCountAdult: adultCount,

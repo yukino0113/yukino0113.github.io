@@ -4,6 +4,7 @@ const CONFIG_SHEET = "config";
 const RSVP_HEADERS = [
   "submission_id",
   "created_at",
+  "status",
   "contact_name",
   "contact_phone",
   "guest_count_adult",
@@ -64,6 +65,7 @@ function handleCreate_(payload) {
   const record = {
     submission_id: submissionId,
     created_at: nowIso,
+    status: String(payload.status || "").trim(),
     contact_name: payload.contactName,
     // Preserve leading zeros in Google Sheets.
     contact_phone: "'" + String(payload.contactPhone || ""),
@@ -127,6 +129,9 @@ function verifyAccessPassword_(accessPassword) {
 function validateBasePayload_(payload) {
   if (!payload || !payload.contactName || !payload.contactPhone) {
     throw createError_("INVALID_INPUT", "contactName/contactPhone 為必填");
+  }
+  if (!payload.status || (payload.status !== "attend" && payload.status !== "decline")) {
+    throw createError_("INVALID_INPUT", "status 必須是 attend 或 decline");
   }
 
   const adult = num_(payload.guestCountAdult);

@@ -69,9 +69,14 @@ if (!form || !submitStatus || !summaryNode || !inviteRecipientBlock || !inviteRe
 
       const result = await createRsvp(accessPassword, payload);
       setStatus(submitStatus, result.message || "送出成功", false);
+      if (result?.ok) {
+        sessionStorage.removeItem(STEP1_KEY);
+        sessionStorage.removeItem(STEP2_KEY);
+        const submissionId = encodeURIComponent(String(result.submissionId || ""));
+        globalThis.location.href = `/submitted.html${submissionId ? `?id=${submissionId}` : ""}`;
+        return;
+      }
 
-      sessionStorage.removeItem(STEP1_KEY);
-      sessionStorage.removeItem(STEP2_KEY);
       form.reset();
       applyInviteModeVisibility();
     } catch (error) {
