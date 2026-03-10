@@ -10,6 +10,7 @@ const appEnv = resolveAppEnv();
 
 const keys = [
   "APPS_SCRIPT_URL",
+  "GUESTBOOK_APPS_SCRIPT_URL",
   "WEDDING_ACCESS_PASSWORD",
   "VERSION",
   "EVENT_COUPLE",
@@ -43,6 +44,7 @@ if (missing.length) {
 const configContent = `window.APP_CONFIG = ${JSON.stringify(
   {
     APPS_SCRIPT_URL: env.APPS_SCRIPT_URL,
+    GUESTBOOK_APPS_SCRIPT_URL: env.GUESTBOOK_APPS_SCRIPT_URL || "",
     WEDDING_ACCESS_PASSWORD: env.WEDDING_ACCESS_PASSWORD,
     VERSION: env.VERSION || "v1.2.1",
     EVENT: {

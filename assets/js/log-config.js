@@ -1,5 +1,5 @@
 export const LOG_DELAY_MIN_MS = 100;
-export const LOG_DELAY_MAX_MS = 500;
+export const LOG_DELAY_MAX_MS = 300;
 
 export const PAGE_LOGS = {
   index: [
@@ -33,5 +33,20 @@ export const PAGE_LOGS = {
     '[22:36:50] [WeddingNotify/INFO]: Delivery method configured',
     '[22:36:50] [WorldMap/INFO]: Venue waypoint synced',
     '[22:36:51] [Achievement/INFO]: Guest Registered ✓'
+  ],
+  guestbookEntry: [
+    "[12:20:00] [GuestBook/INFO]: Message board endpoint discovered",
+    "[12:20:01] [GuestBook/INFO]: Waiting for player route selection...",
+    "[12:20:02] [GuestBook/INFO]: Non-attending guest route available"
+  ],
+  guestbookReply: [
+    "[12:21:00] [GuestBook/INFO]: Message board opened",
+    "[12:21:01] [Server/INFO]: Optional server sponsorship detected",
+    "[12:21:02] [Server/INFO]: Awaiting player selection..."
+  ],
+  guestbookThanks: [
+    "[12:22:30] [GuestBook/INFO]: Message delivered successfully",
+    "[12:22:31] [Archive/INFO]: Blessing archived",
+    "[12:22:32] [Server/INFO]: Thank-you page rendered"
   ]
 };

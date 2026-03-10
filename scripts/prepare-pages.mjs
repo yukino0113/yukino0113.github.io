@@ -11,6 +11,8 @@ const entries = [
   "rsvp.html",
   "invite.html",
   "submitted.html",
+  "guestbook.html",
+  "guestbook-thanks.html",
   "config.js",
   "assets"
 ];

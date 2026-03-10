@@ -1,5 +1,6 @@
 const TZ = "Asia/Taipei";
 const RSVP_SHEET = "rsvps";
+const GUESTBOOK_SHEET = "guestbook";
 const CONFIG_SHEET = "config";
 const RSVP_HEADERS = [
   "submission_id",
@@ -20,6 +21,18 @@ const RSVP_HEADERS = [
   "地址"
 ];
 
+const GUESTBOOK_HEADERS = [
+  "submission_id",
+  "玩家名稱",
+  "填表時間",
+  "祝福留言",
+  "聯絡方式",
+  "聯絡資訊",
+  "匯款帳號後五碼",
+  "喜餅收件人",
+  "喜餅收件地址"
+];
+
 function doGet() {
   return jsonResponse({
     ok: true,
@@ -33,10 +46,13 @@ function doPost(e) {
     ensureSheets_();
 
     const req = parseRequest_(e);
-    verifyAccessPassword_(req.accessPassword);
 
     if (req.action === "create_rsvp") {
+      verifyAccessPassword_(req.accessPassword);
       return jsonResponse(handleCreate_(req.payload));
+    }
+    if (req.action === "create_guestbook") {
+      return jsonResponse(handleCreateGuestbook_(req.payload));
     }
 
     return jsonResponse({
@@ -116,6 +132,45 @@ function handleCreate_(payload) {
   };
 }
 
+function handleCreateGuestbook_(payload) {
+  validateGuestbookPayload_(payload);
+
+  const cfg = readConfigMap_();
+  enforceDeadline_(cfg);
+
+  const sheet = getSheet_(GUESTBOOK_SHEET);
+  const headers = ensureGuestbookHeaders_(sheet);
+  const nowIso = nowIso_();
+  const submissionId = generateSubmissionId_();
+
+  const mode = String(payload.mode || "").trim();
+  const playerName = String(payload.playerName || "").trim();
+  const sponsor = payload.sponsor || {};
+  const record = {
+    submission_id: submissionId,
+    "玩家名稱": playerName,
+    "填表時間": nowIso,
+    "祝福留言": String(payload.message || "").trim(),
+    "聯絡方式": mode === "sponsor" ? String(sponsor.contactMethod || "").trim() : "",
+    "聯絡資訊": mode === "sponsor" ? String(sponsor.contactValue || "").trim() : "",
+    "匯款帳號後五碼": mode === "sponsor" ? String(sponsor.accountLast5 || "").trim() : "",
+    "喜餅收件人": mode === "sponsor" ? String(sponsor.giftRecipient || "").trim() : "",
+    "喜餅收件地址": mode === "sponsor" ? String(sponsor.giftAddress || "").trim() : ""
+  };
+  const row = headers.map(function (header) {
+    return Object.prototype.hasOwnProperty.call(record, header) ? record[header] : "";
+  });
+
+  sheet.appendRow(row);
+
+  return {
+    ok: true,
+    code: "OK",
+    message: "留言送出成功",
+    submissionId: submissionId
+  };
+}
+
 function parseRequest_(e) {
   if (!e || !e.postData || !e.postData.contents) {
     throw createError_("INVALID_INPUT", "Request body 不存在");
@@ -128,8 +183,8 @@ function parseRequest_(e) {
     throw createError_("INVALID_INPUT", "Request body 不是合法 JSON");
   }
 
-  if (!req.action || !req.accessPassword) {
-    throw createError_("INVALID_INPUT", "action 與 accessPassword 為必填");
+  if (!req.action) {
+    throw createError_("INVALID_INPUT", "action 為必填");
   }
   if (!req.payload || typeof req.payload !== "object") {
     throw createError_("INVALID_INPUT", "payload 必須是 object");
@@ -160,6 +215,46 @@ function validateBasePayload_(payload) {
   const child = num_(payload.guestCountChild);
   if (adult < 0 || child < 0 || adult > 20 || child > 20) {
     throw createError_("INVALID_INPUT", "人數不在允許範圍");
+  }
+}
+
+function validateGuestbookPayload_(payload) {
+  if (!payload) {
+    throw createError_("INVALID_INPUT", "payload 不可為空");
+  }
+
+  const mode = String(payload.mode || "").trim();
+  if (mode !== "blessing" && mode !== "sponsor") {
+    throw createError_("INVALID_INPUT", "mode 必須是 blessing 或 sponsor");
+  }
+
+  const playerName = String(payload.playerName || "").trim();
+  if (!playerName) {
+    throw createError_("INVALID_INPUT", "玩家名稱為必填");
+  }
+
+  const message = String(payload.message || "").trim();
+  if (!message) {
+    throw createError_("INVALID_INPUT", "祝福留言為必填");
+  }
+  if (message.length > 2000) {
+    throw createError_("INVALID_INPUT", "祝福留言長度超出限制");
+  }
+
+  if (mode === "sponsor") {
+    const sponsor = payload.sponsor || {};
+    const contactMethod = String(sponsor.contactMethod || "").trim();
+    const contactValue = String(sponsor.contactValue || "").trim();
+    const accountLast5 = String(sponsor.accountLast5 || "").trim();
+    if (!contactMethod || !/^(phone|line|email)$/.test(contactMethod)) {
+      throw createError_("INVALID_INPUT", "聯絡方式需為 phone、line 或 email");
+    }
+    if (!contactValue) {
+      throw createError_("INVALID_INPUT", "聯絡資訊為必填");
+    }
+    if (accountLast5 && !/^\d{5}$/.test(accountLast5)) {
+      throw createError_("INVALID_INPUT", "匯款帳號後五碼需為 5 位數字");
+    }
   }
 }
 
@@ -220,6 +315,16 @@ function ensureSheets_() {
     ensureRsvpHeaders_(rsvp);
   }
 
+  let guestbook = ss.getSheetByName(GUESTBOOK_SHEET);
+  if (!guestbook) {
+    guestbook = ss.insertSheet(GUESTBOOK_SHEET);
+  }
+  if (guestbook.getLastRow() === 0) {
+    guestbook.appendRow(GUESTBOOK_HEADERS);
+  } else {
+    ensureGuestbookHeaders_(guestbook);
+  }
+
   let config = ss.getSheetByName(CONFIG_SHEET);
   if (!config) {
     config = ss.insertSheet(CONFIG_SHEET);
@@ -250,6 +355,24 @@ function ensureRsvpHeaders_(sheet) {
     sheet.getRange(1, RSVP_HEADERS.length + 1, 1, lastCol - RSVP_HEADERS.length).clearContent();
   }
   return RSVP_HEADERS.slice();
+}
+
+function ensureGuestbookHeaders_(sheet) {
+  const lastCol = Math.max(sheet.getLastColumn(), 1);
+  let headers = sheet.getRange(1, 1, 1, lastCol).getValues()[0];
+  headers = headers.map(function (h) {
+    return String(h || "").trim();
+  });
+
+  if (headers.length === 1 && headers[0] === "") {
+    sheet.getRange(1, 1, 1, GUESTBOOK_HEADERS.length).setValues([GUESTBOOK_HEADERS]);
+    return GUESTBOOK_HEADERS.slice();
+  }
+  sheet.getRange(1, 1, 1, GUESTBOOK_HEADERS.length).setValues([GUESTBOOK_HEADERS]);
+  if (lastCol > GUESTBOOK_HEADERS.length) {
+    sheet.getRange(1, GUESTBOOK_HEADERS.length + 1, 1, lastCol - GUESTBOOK_HEADERS.length).clearContent();
+  }
+  return GUESTBOOK_HEADERS.slice();
 }
 
 function getSheet_(name) {

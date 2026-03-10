@@ -1,16 +1,23 @@
 import { getConfig } from "./app-config.js";
 
-async function callApi(action, accessPassword, payload) {
+async function callApi(action, payload, options) {
   const { APPS_SCRIPT_URL } = getConfig();
-  if (!APPS_SCRIPT_URL) {
+  const targetUrl = options?.endpointUrl || APPS_SCRIPT_URL;
+  if (!targetUrl) {
     throw new Error("APPS_SCRIPT_URL 尚未設定，請先建立 config.js");
   }
 
-  const requestBody = JSON.stringify({ action, accessPassword, payload });
+  const requestBody = JSON.stringify({
+    action,
+    payload,
+    ...(Object.prototype.hasOwnProperty.call(options || {}, "accessPassword")
+      ? { accessPassword: options.accessPassword }
+      : {})
+  });
   const TIMEOUT_MS = 12000;
 
   try {
-    const response = await fetchWithTimeout(APPS_SCRIPT_URL, {
+    const response = await fetchWithTimeout(targetUrl, {
       method: "POST",
       // Keep request simple to avoid preflight when possible.
       body: requestBody
@@ -43,7 +50,7 @@ async function callApi(action, accessPassword, payload) {
     // Fallback for browsers/environments that block Apps Script CORS preflight.
     try {
       await fetchWithTimeout(
-        APPS_SCRIPT_URL,
+        targetUrl,
         {
           method: "POST",
           mode: "no-cors",
@@ -67,7 +74,18 @@ async function callApi(action, accessPassword, payload) {
 }
 
 export function createRsvp(accessPassword, payload) {
-  return callApi("create_rsvp", accessPassword, payload);
+  return callApi("create_rsvp", payload, { accessPassword });
+}
+
+export function createGuestbook(payload) {
+  const { GUESTBOOK_APPS_SCRIPT_URL, APPS_SCRIPT_URL } = getConfig();
+  return callApi(
+    "create_guestbook",
+    payload,
+    {
+      endpointUrl: GUESTBOOK_APPS_SCRIPT_URL || APPS_SCRIPT_URL
+    }
+  );
 }
 
 async function fetchWithTimeout(url, init, timeoutMs) {

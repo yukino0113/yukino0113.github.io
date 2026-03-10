@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>未登入玩家留言板</title>
+    <meta name="description" content="無法參與婚宴的賓客留言入口" />
+    <style>
+      html,
+      body {
+        margin: 0;
+        background: #6bb5ff;
+      }
+    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Noto+Sans+TC:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/assets/css/styles.css" />
+  </head>
+  <body>
+    <div class="sky"></div>
+    <header class="site-header pixel-card compact">
+      <h1>未登入玩家留言板</h1>
+      <pre class="console-log" id="page-log" aria-live="polite"></pre>
+      <p class="subtitle" data-log-subtitle hidden>
+        我們誠摯邀請您進入我們的婚宴伺服器。若當天無法登入婚宴世界，也歡迎在這個留言板上留下想對我們說的話。每一則留言，我們都會親自閱讀並好好珍藏。
+      </p>
+    </header>
+
+    <main class="rsvp-layout" data-log-reveal hidden>
+      <section class="pixel-card form-card">
+        <h2>留言板</h2>
+        <form id="guestbook-entry-form" novalidate>
+          <label>
+            玩家名稱
+            <input name="playerName" type="text" maxlength="80" required />
+          </label>
+
+          <fieldset>
+            <legend class="section-legend">請選擇留言路線</legend>
+            <label class="radio-option">
+              <input type="radio" name="guestbookMode" value="blessing" required />
+              留下祝福訊息
+            </label>
+            <label class="radio-option">
+              <input type="radio" name="guestbookMode" value="sponsor" />
+              留下祝福並贊助伺服器（會不隨機贈送獎勵）
+            </label>
+          </fieldset>
+
+          <pre class="console-log">
+<span class="log-info">[GuestBook/INFO]: Message board opened</span>
+<span class="log-info">/msg &lt;couple&gt; {祝福留言}</span>
+          </pre>
+
+          <label>
+            想對我們說的任何話（可以很長，也可以很短）<br />我們都會感激的仔細閱讀
+            <textarea name="blessingMessage" rows="5" maxlength="2000" required></textarea>
+          </label>
+
+          <section class="auth-panel" id="sponsor-panel" hidden>
+            <h3>伺服器贊助區</h3>
+            <pre class="console-log">
+<span class="log-info">[GuestBook/INFO]: Message board opened</span>
+<span class="log-info">[Server/INFO]: Optional server sponsorship detected</span>
+<span class="log-info">[Server/INFO]: Awaiting player selection...</span>
+            </pre>
+            <p>
+              若您希望另外表達心意，也可以選擇贊助婚宴伺服器。<br />
+              這並非必要，您的祝福對我們而言已經非常珍貴。<br />
+              若選擇此方式，我們也會準備一份喜餅以及我們的喜帖作為回禮。
+            </p>
+
+            <fieldset>
+              <legend class="section-legend">匯款資訊</legend>
+              <p>匯款銀行：000</p>
+              <p>匯款帳戶：123</p>
+            </fieldset>
+
+            <fieldset>
+              <legend class="section-legend">聯絡方式</legend>
+              <label class="radio-option">
+                <input type="radio" name="contactMethod" value="phone" />
+                電話/手機
+              </label>
+              <label class="radio-option">
+                <input type="radio" name="contactMethod" value="line" />
+                Line
+              </label>
+              <label class="radio-option">
+                <input type="radio" name="contactMethod" value="email" />
+                電子郵件
+              </label>
+            </fieldset>
+            <label>
+              聯絡資訊
+              <input name="contactValue" type="text" maxlength="120" placeholder="請填寫電話、Line ID 或 Email" />
+            </label>
+            <label>
+              匯款帳號後五碼（選填）
+              <input name="accountLast5" type="text" inputmode="numeric" maxlength="5" />
+            </label>
+            <label>
+              喜餅收件人（選填）
+              <span class="radio-option">
+                <input type="checkbox" name="giftRecipientSameAsPlayer" />
+                與玩家名稱相同
+              </span>
+              <input name="giftRecipient" type="text" maxlength="80" />
+            </label>
+            <label>
+              喜餅收件地址（選填）
+              <textarea name="giftAddress" rows="3" maxlength="240"></textarea>
+            </label>
+          </section>
+
+          <div class="actions">
+            <a class="pixel-btn secondary" href="/index.html">返回首頁</a>
+            <button type="submit" class="pixel-btn submit-btn">送出留言</button>
+          </div>
+          <output class="status" id="submit-status" aria-live="polite"></output>
+        </form>
+      </section>
+    </main>
+
+    <div class="loading-overlay" id="loading-overlay" hidden aria-busy="true">
+      <div class="loading-panel pixel-card">
+        <output class="loading-title" aria-live="polite">儲存中...</output>
+        <div class="loading-blocks" aria-hidden="true">
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+        <p class="loading-text">正在把留言寫入留言板</p>
+      </div>
+    </div>
+
+    <footer class="site-footer" data-log-finish hidden>
+      <p id="footer-version">Version</p>
+      <p class="author">Author: Jethro Conde Lim (Yukino)</p>
+    </footer>
+
+    <script src="/config.js"></script>
+    <script type="module" src="/assets/js/guestbook-entry.js"></script>
+  </body>
+</html>
