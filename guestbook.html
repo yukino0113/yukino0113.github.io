@@ -31,12 +31,13 @@
     </header>
 
     <main class="rsvp-layout" data-log-reveal hidden>
+
       <section class="pixel-card form-card">
         <h2>留言板</h2>
         <form id="guestbook-entry-form" novalidate>
           <label>
-            玩家名稱
-            <input name="playerName" type="text" maxlength="80" required />
+              /sign write {您的姓名 or 綽號}
+            <input name="playerName" type="text" placeholder="請輸入您的名字或暱稱" maxlength="80" required />
           </label>
 
           <fieldset>
@@ -47,31 +48,26 @@
             </label>
             <label class="radio-option">
               <input type="radio" name="guestbookMode" value="sponsor" />
-              留下祝福並贊助伺服器（會不隨機贈送獎勵）
+              留下祝福並贊助伺服器（會贈送獎勵）
             </label>
           </fieldset>
 
-          <pre class="console-log">
-<span class="log-info">[GuestBook/INFO]: Message board opened</span>
-<span class="log-info">/msg &lt;couple&gt; {祝福留言}</span>
-          </pre>
-
           <label>
-            想對我們說的任何話（可以很長，也可以很短）<br />我們都會感激的仔細閱讀
-            <textarea name="blessingMessage" rows="5" maxlength="2000" required></textarea>
+            /msg &lt;couple&gt; {祝福留言}
+            <textarea name="blessingMessage" rows="5" placeholder="想對我們說的任何話（可以很長，也可以很短，我們都會感激的仔細閱讀" maxlength="2000"></textarea>
           </label>
 
           <section class="auth-panel" id="sponsor-panel" hidden>
-            <h3>伺服器贊助區</h3>
+            <h2>伺服器贊助區</h2>
             <pre class="console-log">
-<span class="log-info">[GuestBook/INFO]: Message board opened</span>
-<span class="log-info">[Server/INFO]: Optional server sponsorship detected</span>
-<span class="log-info">[Server/INFO]: Awaiting player selection...</span>
+                <span class="log-info">[GuestBook/INFO]: Message board opened</span>
+                <span class="log-info">[Server/INFO]: Optional server sponsorship detected</span>
+                <span class="log-info">[Server/INFO]: Awaiting player selection...</span>
             </pre>
             <p>
               若您希望另外表達心意，也可以選擇贊助婚宴伺服器。<br />
               這並非必要，您的祝福對我們而言已經非常珍貴。<br />
-              若選擇此方式，我們也會準備一份喜餅以及我們的喜帖作為回禮。
+              若選擇此方式，我們也會準備一份喜餅作為回禮。
             </p>
 
             <fieldset>
@@ -81,7 +77,7 @@
             </fieldset>
 
             <fieldset>
-              <legend class="section-legend">聯絡方式</legend>
+              <legend class="section-legend">您的聯絡方式</legend>
               <label class="radio-option">
                 <input type="radio" name="contactMethod" value="phone" />
                 電話/手機
@@ -100,11 +96,11 @@
               <input name="contactValue" type="text" maxlength="120" placeholder="請填寫電話、Line ID 或 Email" />
             </label>
             <label>
-              匯款帳號後五碼（選填）
+              匯款帳號後五碼
               <input name="accountLast5" type="text" inputmode="numeric" maxlength="5" />
             </label>
             <label>
-              喜餅收件人（選填）
+              喜餅收件人
               <span class="radio-option">
                 <input type="checkbox" name="giftRecipientSameAsPlayer" />
                 與玩家名稱相同
@@ -112,7 +108,7 @@
               <input name="giftRecipient" type="text" maxlength="80" />
             </label>
             <label>
-              喜餅收件地址（選填）
+              喜餅收件地址
               <textarea name="giftAddress" rows="3" maxlength="240"></textarea>
             </label>
           </section>

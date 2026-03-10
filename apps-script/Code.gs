@@ -234,9 +234,6 @@ function validateGuestbookPayload_(payload) {
   }
 
   const message = String(payload.message || "").trim();
-  if (!message) {
-    throw createError_("INVALID_INPUT", "祝福留言為必填");
-  }
   if (message.length > 2000) {
     throw createError_("INVALID_INPUT", "祝福留言長度超出限制");
   }
