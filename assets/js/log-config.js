@@ -40,9 +40,11 @@ export const PAGE_LOGS = {
     "[12:20:02] [GuestBook/INFO]: Direct message route available"
   ],
   donate: [
-    "[12:21:00] [GuestBook/INFO]: Message board opened",
+    '[22:36:50] [Registry/INFO]: Message saved',
+    "[12:21:00] [GuestBook/INFO]: Donation board opened",
     "[12:21:01] [Server/INFO]: Optional server sponsorship detected",
-    "[12:21:02] [Server/INFO]: Awaiting player selection..."
+    "[12:21:02] [Server/INFO]: Gift prepared (50%)...",
+    "[12:21:02] [Server/INFO]: Gift prepared done!!..."
   ],
   guestbookThanks: [
     "[12:22:30] [GuestBook/INFO]: Message delivered successfully",

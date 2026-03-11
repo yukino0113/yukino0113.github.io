@@ -25,26 +25,15 @@
     <header class="site-header pixel-card compact">
       <h1>贊助婚宴伺服器</h1>
       <pre class="console-log" id="page-log" aria-live="polite"></pre>
-      <p class="subtitle" data-log-subtitle hidden>補完聯絡與回禮資訊後，即可連同祝福一起送出。</p>
+      <p class="subtitle" data-log-subtitle>前一頁填寫的玩家名稱與祝福留言會一併送出，這一頁只需要補完贊助與回禮資訊。</p>
     </header>
 
     <main class="rsvp-layout" data-log-reveal hidden>
       <section class="pixel-card form-card">
-        <h2>贊助表單</h2>
         <form id="donate-form" novalidate>
-          <p class="subtitle">前一頁填寫的玩家名稱與祝福留言會一併送出，這一頁只需要補完贊助與回禮資訊。</p>
-
-          <section class="auth-panel">
             <h2>伺服器贊助區</h2>
-            <pre class="console-log">
-<span class="log-info">[GuestBook/INFO]: Message board opened</span>
-<span class="log-info">[Server/INFO]: Optional server sponsorship detected</span>
-<span class="log-info">[Server/INFO]: Awaiting player selection...</span>
-            </pre>
             <p>
-              若您希望另外表達心意，也可以選擇贊助婚宴伺服器。<br />
-              這並非必要，您的祝福對我們而言已經非常珍貴。<br />
-              若選擇此方式，我們也會準備一份喜餅作為回禮。
+              所有捐款 100% 都會使用於本次伺服器維護費用，還有伊布們的罐罐！
             </p>
 
             <fieldset>
@@ -78,21 +67,21 @@
             </label>
             <label>
               匯款帳號後五碼
-              <input name="accountLast5" type="text" inputmode="numeric" maxlength="5" />
+              <input name="accountLast5" type="text" placeholder="請輸入正確後五碼，以利村民準備您的禮物" inputmode="numeric" maxlength="5" />
             </label>
             <label>
-              喜餅收件人
+              喜餅收件人姓名（本名或綽號）
               <span class="radio-option">
-                <input type="checkbox" name="giftRecipientSameAsPlayer" />
+                <input type="checkbox" placeholder="Enderman 不會與您核對姓名，請確實填寫以免禮品送錯人！" name="giftRecipientSameAsPlayer" />
                 與玩家名稱相同
               </span>
               <input name="giftRecipient" type="text" maxlength="80" />
             </label>
             <label>
               喜餅收件地址
-              <textarea name="giftAddress" rows="3" maxlength="240"></textarea>
+              <textarea name="giftAddress" placeholder="為了避免 Enderman 投遞錯誤被關進安德塔，請填寫完整郵遞區號與地址" rows="3" maxlength="240"></textarea>
             </label>
-          </section>
+
 
           <div class="actions">
             <a class="pixel-btn secondary" href="/guestbook.html">返回留言板</a>
