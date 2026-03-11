@@ -3,6 +3,11 @@ const defaultConfig = {
   GUESTBOOK_APPS_SCRIPT_URL: "",
   WEDDING_ACCESS_PASSWORD: "",
   VERSION: "v1.2.0",
+  BANK: {
+    CODE: "",
+    ACCOUNT: "",
+    QR: ""
+  },
   EVENT: {
     COUPLE: "請在 config.js 設定新人名稱",
     DATE: "請在 config.js 設定婚宴日期",
@@ -16,6 +21,10 @@ const appConfig = globalThis.APP_CONFIG;
 const mergedConfig = {
   ...defaultConfig,
   ...appConfig,
+  BANK: {
+    ...defaultConfig.BANK,
+    ...appConfig?.BANK
+  },
   EVENT: {
     ...defaultConfig.EVENT,
     ...appConfig?.EVENT

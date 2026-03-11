@@ -13,6 +13,9 @@ const keys = [
   "GUESTBOOK_APPS_SCRIPT_URL",
   "WEDDING_ACCESS_PASSWORD",
   "VERSION",
+  "BANK_CODE",
+  "BANK_ACCOUNT",
+  "BANK_QR",
   "EVENT_COUPLE",
   "EVENT_DATE",
   "EVENT_VENUE",
@@ -47,6 +50,11 @@ const configContent = `window.APP_CONFIG = ${JSON.stringify(
     GUESTBOOK_APPS_SCRIPT_URL: env.GUESTBOOK_APPS_SCRIPT_URL || "",
     WEDDING_ACCESS_PASSWORD: env.WEDDING_ACCESS_PASSWORD,
     VERSION: env.VERSION || "v1.2.1",
+    BANK: {
+      CODE: env.BANK_CODE || "",
+      ACCOUNT: env.BANK_ACCOUNT || "",
+      QR: env.BANK_QR || ""
+    },
     EVENT: {
       COUPLE: env.EVENT_COUPLE,
       DATE: env.EVENT_DATE,

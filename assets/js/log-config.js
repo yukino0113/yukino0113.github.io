@@ -36,10 +36,10 @@ export const PAGE_LOGS = {
   ],
   guestbookEntry: [
     "[12:20:00] [GuestBook/INFO]: Message board endpoint discovered",
-    "[12:20:01] [GuestBook/INFO]: Waiting for player route selection...",
-    "[12:20:02] [GuestBook/INFO]: Non-attending guest route available"
+    "[12:20:01] [GuestBook/INFO]: Message board opened",
+    "[12:20:02] [GuestBook/INFO]: Direct message route available"
   ],
-  guestbookReply: [
+  donate: [
     "[12:21:00] [GuestBook/INFO]: Message board opened",
     "[12:21:01] [Server/INFO]: Optional server sponsorship detected",
     "[12:21:02] [Server/INFO]: Awaiting player selection..."

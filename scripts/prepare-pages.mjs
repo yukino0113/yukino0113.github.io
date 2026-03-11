@@ -12,6 +12,7 @@ const entries = [
   "invite.html",
   "submitted.html",
   "guestbook.html",
+  "donate.html",
   "guestbook-thanks.html",
   "config.js",
   "assets"

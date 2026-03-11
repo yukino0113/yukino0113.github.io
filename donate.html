@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>贊助婚宴伺服器</title>
+    <meta name="description" content="婚宴贊助與聯絡資訊頁面" />
+    <style>
+      html,
+      body {
+        margin: 0;
+        background: #6bb5ff;
+      }
+    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Noto+Sans+TC:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/assets/css/styles.css" />
+  </head>
+  <body>
+    <div class="sky"></div>
+    <header class="site-header pixel-card compact">
+      <h1>贊助婚宴伺服器</h1>
+      <pre class="console-log" id="page-log" aria-live="polite"></pre>
+      <p class="subtitle" data-log-subtitle hidden>補完聯絡與回禮資訊後，即可連同祝福一起送出。</p>
+    </header>
+
+    <main class="rsvp-layout" data-log-reveal hidden>
+      <section class="pixel-card form-card">
+        <h2>贊助表單</h2>
+        <form id="donate-form" novalidate>
+          <p class="subtitle">前一頁填寫的玩家名稱與祝福留言會一併送出，這一頁只需要補完贊助與回禮資訊。</p>
+
+          <section class="auth-panel">
+            <h2>伺服器贊助區</h2>
+            <pre class="console-log">
+<span class="log-info">[GuestBook/INFO]: Message board opened</span>
+<span class="log-info">[Server/INFO]: Optional server sponsorship detected</span>
+<span class="log-info">[Server/INFO]: Awaiting player selection...</span>
+            </pre>
+            <p>
+              若您希望另外表達心意，也可以選擇贊助婚宴伺服器。<br />
+              這並非必要，您的祝福對我們而言已經非常珍貴。<br />
+              若選擇此方式，我們也會準備一份喜餅作為回禮。
+            </p>
+
+            <fieldset>
+              <legend class="section-legend">匯款資訊</legend>
+              <p>匯款銀行：<span id="bank-code">-</span></p>
+              <p>匯款帳戶：<span id="bank-account">-</span></p>
+              <div class="bank-qr-panel" id="bank-qr-panel" hidden>
+                <img id="bank-qr-image" class="bank-qr-image" alt="匯款 QR Code" />
+              </div>
+            </fieldset>
+
+            <fieldset>
+              <legend class="section-legend">您的聯絡方式</legend>
+              <label class="radio-option">
+                <input type="radio" name="contactMethod" value="phone" />
+                電話/手機
+              </label>
+              <label class="radio-option">
+                <input type="radio" name="contactMethod" value="line" />
+                Line
+              </label>
+              <label class="radio-option">
+                <input type="radio" name="contactMethod" value="email" />
+                電子郵件
+              </label>
+            </fieldset>
+
+            <label>
+              聯絡資訊
+              <input name="contactValue" type="text" maxlength="120" placeholder="請填寫電話、Line ID 或 Email" />
+            </label>
+            <label>
+              匯款帳號後五碼
+              <input name="accountLast5" type="text" inputmode="numeric" maxlength="5" />
+            </label>
+            <label>
+              喜餅收件人
+              <span class="radio-option">
+                <input type="checkbox" name="giftRecipientSameAsPlayer" />
+                與玩家名稱相同
+              </span>
+              <input name="giftRecipient" type="text" maxlength="80" />
+            </label>
+            <label>
+              喜餅收件地址
+              <textarea name="giftAddress" rows="3" maxlength="240"></textarea>
+            </label>
+          </section>
+
+          <div class="actions">
+            <a class="pixel-btn secondary" href="/guestbook.html">返回留言板</a>
+            <button type="submit" class="pixel-btn submit-btn">送出贊助資訊</button>
+          </div>
+          <output class="status" id="submit-status" aria-live="polite"></output>
+        </form>
+      </section>
+    </main>
+
+    <div class="loading-overlay" id="loading-overlay" hidden aria-busy="true">
+      <div class="loading-panel pixel-card">
+        <output class="loading-title" aria-live="polite">儲存中...</output>
+        <div class="loading-blocks" aria-hidden="true">
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+        <p class="loading-text">正在把留言與贊助資訊寫入留言板</p>
+      </div>
+    </div>
+
+    <footer class="site-footer" data-log-finish hidden>
+      <p id="footer-version">Version</p>
+      <p class="author">Author: Jethro Conde Lim (Yukino)</p>
+    </footer>
+
+    <script src="/config.js"></script>
+    <script type="module" src="/assets/js/donate.js"></script>
+  </body>
+</html>

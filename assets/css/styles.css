@@ -314,6 +314,25 @@ textarea:focus-visible,
   margin: 0.8rem 0;
 }
 
+.donate-panel {
+  margin-top: 1rem;
+}
+
+.bank-qr-panel {
+  margin-top: 0.8rem;
+  padding: 0.75rem;
+  background: #f3f2ef;
+  border: 3px solid #414141;
+}
+
+.bank-qr-image {
+  display: block;
+  width: auto;
+  max-width: calc(100vw - 3rem);
+  height: auto;
+  image-rendering: auto;
+}
+
 .actions {
   display: flex;
   flex-wrap: wrap;
