@@ -80,9 +80,6 @@ async function submitGuestbook() {
       throw new Error("請填寫玩家名稱");
     }
     const message = toText(data.get("blessingMessage"));
-    if (!message) {
-      throw new Error("請填寫祝福留言");
-    }
 
     isSubmitting = true;
     setLoading(true);
