@@ -102,6 +102,10 @@ async function submitDonation() {
     if (!playerName) {
       throw new Error("找不到前一頁的玩家名稱，請返回留言板重新填寫");
     }
+    const message = toText(donateDraft?.message);
+    if (!message) {
+      throw new Error("找不到前一頁的祝福留言，請返回留言板重新填寫");
+    }
 
     const data = new FormData(form);
     const sponsor = {
@@ -124,7 +128,7 @@ async function submitDonation() {
     const result = await createGuestbook({
       playerName,
       mode: "sponsor",
-      message: toText(donateDraft?.message),
+      message,
       sponsor
     });
     sessionStorage.removeItem(DONATE_DRAFT_KEY);

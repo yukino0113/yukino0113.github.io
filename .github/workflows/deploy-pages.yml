@@ -30,13 +30,17 @@ jobs:
       - name: Build deploy artifact
         env:
           APP_ENV: production
-          APPS_SCRIPT_URL: ${{ vars.APPS_SCRIPT_URL }}
-          WEDDING_ACCESS_PASSWORD: ${{ vars.WEDDING_ACCESS_PASSWORD }}
-          VERSION: ${{ vars.VERSION }}
-          EVENT_COUPLE: ${{ vars.EVENT_COUPLE }}
-          EVENT_DATE: ${{ vars.EVENT_DATE }}
-          EVENT_VENUE: ${{ vars.EVENT_VENUE }}
-          EVENT_DEADLINE: ${{ vars.EVENT_DEADLINE }}
+          APPS_SCRIPT_URL: ${{ vars.APPS_SCRIPT_URL || secrets.APPS_SCRIPT_URL }}
+          GUESTBOOK_APPS_SCRIPT_URL: ${{ vars.GUESTBOOK_APPS_SCRIPT_URL || secrets.GUESTBOOK_APPS_SCRIPT_URL }}
+          WEDDING_ACCESS_PASSWORD: ${{ vars.WEDDING_ACCESS_PASSWORD || secrets.WEDDING_ACCESS_PASSWORD }}
+          VERSION: ${{ vars.VERSION || secrets.VERSION }}
+          BANK_CODE: ${{ vars.BANK_CODE || secrets.BANK_CODE }}
+          BANK_ACCOUNT: ${{ vars.BANK_ACCOUNT || secrets.BANK_ACCOUNT }}
+          BANK_QR: ${{ vars.BANK_QR || secrets.BANK_QR }}
+          EVENT_COUPLE: ${{ vars.EVENT_COUPLE || secrets.EVENT_COUPLE }}
+          EVENT_DATE: ${{ vars.EVENT_DATE || secrets.EVENT_DATE }}
+          EVENT_VENUE: ${{ vars.EVENT_VENUE || secrets.EVENT_VENUE }}
+          EVENT_DEADLINE: ${{ vars.EVENT_DEADLINE || secrets.EVENT_DEADLINE }}
         run: npm run build:pages
 
       - name: Configure Pages
