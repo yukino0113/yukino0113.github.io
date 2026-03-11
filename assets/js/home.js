@@ -8,7 +8,7 @@ document.getElementById("event-couple").textContent = config.EVENT.COUPLE;
 document.getElementById("event-date").textContent = config.EVENT.DATE;
 document.getElementById("event-venue").textContent = config.EVENT.VENUE;
 document.getElementById("event-deadline").textContent = config.EVENT.DEADLINE;
-document.getElementById("footer-version").textContent = config.VERSION || "v1.2.1";
+document.getElementById("footer-version").textContent = config.VERSION || "v1.7.10 (1614)";
 
 const passwordInput = document.getElementById("home-access-password");
 const authStatus = document.getElementById("home-auth-status");

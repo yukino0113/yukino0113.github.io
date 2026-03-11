@@ -10,7 +10,7 @@ const submitStatus = document.getElementById("submit-status");
 const footerVersion = document.getElementById("footer-version");
 
 if (footerVersion) {
-  footerVersion.textContent = config.VERSION || "v1.2.1";
+  footerVersion.textContent = config.VERSION || "v1.7.10 (1614)";
 }
 
 if (form && submitStatus) {

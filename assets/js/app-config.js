@@ -2,7 +2,7 @@ const defaultConfig = {
   APPS_SCRIPT_URL: "",
   GUESTBOOK_APPS_SCRIPT_URL: "",
   WEDDING_ACCESS_PASSWORD: "",
-  VERSION: "v1.2.0",
+  VERSION: "v1.7.10 (1614)",
   BANK: {
     CODE: "",
     ACCOUNT: "",

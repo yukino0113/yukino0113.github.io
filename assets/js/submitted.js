@@ -8,7 +8,7 @@ const eventDate = document.getElementById("submitted-event-date");
 const eventPort = document.getElementById("submitted-event-port");
 
 if (footerVersion) {
-  footerVersion.textContent = config.VERSION || "v1.2.1";
+  footerVersion.textContent = config.VERSION || "v1.7.10 (1614)";
 }
 if (eventDate) {
   eventDate.textContent = config.EVENT?.DATE || "-";

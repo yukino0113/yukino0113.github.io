@@ -26,6 +26,57 @@ body {
   overflow-x: hidden;
 }
 
+body.signboard-page {
+  background:
+    linear-gradient(180deg, #7cc7ff 0 42%, #b9e4ff 42% 55%, #74ad57 55% 61%, #6a4a2f 61% 100%);
+  isolation: isolate;
+}
+
+body.signboard-page::before,
+body.signboard-page::after {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+}
+
+body.signboard-page::before {
+  top: 24px;
+  right: max(16px, calc((100vw - 1040px) / 2));
+  bottom: 24px;
+  left: max(16px, calc((100vw - 1040px) / 2));
+  z-index: -1;
+  border: 6px solid #4b2d16;
+  box-shadow:
+    0 0 0 4px #221209,
+    14px 14px 0 rgba(46, 25, 12, 0.5);
+  background:
+    linear-gradient(90deg, rgba(86, 53, 28, 0.55) 0 6%, rgba(255, 255, 255, 0.08) 6% 8%, transparent 8% 92%, rgba(57, 33, 17, 0.38) 92% 100%),
+    repeating-linear-gradient(
+      180deg,
+      #cb9055 0 48px,
+      #b97f48 48px 52px,
+      #a86f3e 52px 100px,
+      #9a6437 100px 104px
+    );
+}
+
+body.signboard-page::after {
+  left: 50%;
+  bottom: 0;
+  width: min(980px, calc(100vw - 3rem));
+  height: 160px;
+  transform: translateX(-50%);
+  z-index: -1;
+  background:
+    linear-gradient(90deg, transparent 0 10%, #6e4526 10% 14%, transparent 14% 86%, #6e4526 86% 90%, transparent 90% 100%),
+    linear-gradient(180deg, transparent 0 35%, #56331c 35% 100%);
+}
+
+body.signboard-page--compact::before,
+body.signboard-page--compact::after {
+  display: none;
+}
+
 .sky {
   position: fixed;
   inset: 0;
@@ -35,7 +86,19 @@ body {
     radial-gradient(circle at 78% 26%, rgba(255, 255, 255, 0.5) 0, rgba(255, 255, 255, 0.5) 10px, transparent 12px),
     linear-gradient(0deg, rgba(106, 74, 47, 0.95) 0 90px, rgba(104, 167, 79, 0.95) 90px 130px, transparent 130px);
   background-size: 320px 220px, 260px 180px, 100% 100%;
+  background-repeat: no-repeat, no-repeat, no-repeat;
+  background-position: 20% 20%, 78% 26%, center center;
   image-rendering: pixelated;
+}
+
+body.signboard-page .sky {
+  background-image:
+    radial-gradient(circle at 22% 18%, rgba(255, 255, 255, 0.72) 0, rgba(255, 255, 255, 0.72) 12px, transparent 13px),
+    radial-gradient(circle at 74% 24%, rgba(255, 255, 255, 0.62) 0, rgba(255, 255, 255, 0.62) 10px, transparent 11px),
+    linear-gradient(0deg, rgba(86, 58, 35, 0.96) 0 118px, rgba(116, 80, 49, 0.96) 118px 164px, rgba(112, 171, 84, 0.96) 164px 212px, transparent 212px);
+  background-size: 280px 180px, 240px 160px, 100% 100%;
+  background-repeat: no-repeat, no-repeat, no-repeat;
+  background-position: 22% 18%, 74% 24%, center center;
 }
 
 .site-header,
@@ -101,6 +164,54 @@ body {
   padding: 1.1rem;
 }
 
+body.signboard-page .pixel-card {
+  background: linear-gradient(180deg, #c98b4d 0%, #b7773f 100%);
+  border-color: #5b371c;
+  box-shadow: 8px 8px 0 #3f2612;
+  color: #2a180d;
+  background-image:
+    linear-gradient(90deg, rgba(255, 241, 214, 0.1) 0, rgba(255, 241, 214, 0.1) 8px, transparent 8px, transparent 22px),
+    linear-gradient(180deg, #cf9558 0%, #b7773f 100%);
+}
+
+body.signboard-page .site-header,
+body.signboard-page .form-card {
+  position: relative;
+}
+
+body.signboard-page .site-header,
+body.signboard-page .form-card,
+body.signboard-page .loading-panel {
+  border-width: 5px;
+  box-shadow:
+    0 0 0 4px #26160c,
+    10px 10px 0 #3f2612;
+}
+
+body.signboard-page .site-header::before,
+body.signboard-page .site-header::after,
+body.signboard-page .form-card::before,
+body.signboard-page .form-card::after {
+  content: "";
+  position: absolute;
+  bottom: -36px;
+  width: 14px;
+  height: 44px;
+  background: linear-gradient(180deg, #7a4d29 0%, #5f391d 100%);
+  border: 3px solid #492b15;
+  z-index: -1;
+}
+
+body.signboard-page .site-header::before,
+body.signboard-page .form-card::before {
+  left: 24px;
+}
+
+body.signboard-page .site-header::after,
+body.signboard-page .form-card::after {
+  right: 24px;
+}
+
 .eyebrow,
 .pixel-btn,
 legend {
@@ -129,6 +240,11 @@ h3 {
   font-size: 0.75rem;
 }
 
+body.signboard-page .eyebrow,
+body.signboard-page .subtitle {
+  color: #422510;
+}
+
 .subtitle {
   margin: 0;
   color: #4e463f;
@@ -143,6 +259,19 @@ h3 {
   font-family: "Courier New", monospace;
   white-space: normal;
   line-height: 1.2;
+}
+
+body.signboard-page .console-log {
+  background: #24150d;
+  border-color: #714725;
+  box-shadow: inset 0 0 0 3px #170e08;
+}
+
+body.signboard-page .subtitle,
+body.signboard-page .status,
+body.signboard-page .site-footer,
+body.signboard-page .site-footer .author {
+  text-shadow: 0 1px 0 rgba(255, 240, 220, 0.16);
 }
 
 .console-log .log-info {
@@ -251,6 +380,13 @@ fieldset {
   background: #f3f2ef;
 }
 
+body.signboard-page fieldset,
+body.signboard-page .auth-panel,
+body.signboard-page .bank-qr-panel {
+  background: rgba(255, 241, 216, 0.32);
+  border-color: #6f4623;
+}
+
 legend {
   font-size: 0.62rem;
   padding: 0 0.4rem;
@@ -291,6 +427,13 @@ textarea {
   color: #1d1b19;
   padding: 0.62rem;
   font: inherit;
+}
+
+body.signboard-page input,
+body.signboard-page textarea {
+  background: #fff8eb;
+  border-color: #6a4425;
+  box-shadow: inset 0 2px 0 rgba(90, 56, 30, 0.16);
 }
 
 input:focus-visible,
@@ -360,10 +503,54 @@ textarea:focus-visible,
   font-weight: 700;
 }
 
+body.signboard-page .site-footer {
+  position: relative;
+  width: min(980px, calc(100% - 2rem));
+  margin: -0.35rem auto 1.8rem;
+  padding: 1rem 1rem 1.2rem;
+  color: #ffe8ca;
+  text-shadow: 0 2px 0 #4a2c15;
+  background:
+    linear-gradient(90deg, #704321 0 7%, #5e3419 7% 93%, #704321 93% 100%);
+  border: 5px solid #4b2d16;
+  border-top: 0;
+  box-shadow:
+    0 0 0 4px #26160c,
+    10px 10px 0 #3f2612;
+}
+
+body.signboard-page .site-footer::before,
+body.signboard-page .site-footer::after {
+  content: "";
+  position: absolute;
+  bottom: -28px;
+  width: 16px;
+  height: 28px;
+  background: linear-gradient(180deg, #7a4d29 0%, #5f391d 100%);
+  border: 3px solid #492b15;
+  z-index: -1;
+}
+
+body.signboard-page .site-footer::before {
+  left: 72px;
+}
+
+body.signboard-page .site-footer::after {
+  right: 72px;
+}
+
 .site-footer .author {
   margin: 0.2rem 0 0;
   font-weight: 600;
   opacity: 0.92;
+}
+
+.quest-strike {
+  text-decoration-line: line-through;
+  text-decoration-thickness: 0.18em;
+  text-decoration-color: #7d1d14;
+  text-decoration-skip-ink: none;
+  color: #3c2413;
 }
 
 .compact {
@@ -462,5 +649,36 @@ textarea:focus-visible,
 
   .pixel-btn {
     width: 100%;
+  }
+
+  body.signboard-page .site-footer {
+    width: min(100%, calc(100% - 1rem));
+    margin: -0.2rem auto 1rem;
+    box-shadow:
+      0 0 0 3px #26160c,
+      6px 6px 0 #3f2612;
+  }
+
+  body.signboard-page .site-footer::before {
+    left: 32px;
+  }
+
+  body.signboard-page .site-footer::after {
+    right: 32px;
+  }
+
+  body.signboard-page::before {
+    top: 12px;
+    right: 8px;
+    bottom: 20px;
+    left: 8px;
+    box-shadow:
+      0 0 0 3px #221209,
+      8px 8px 0 rgba(46, 25, 12, 0.42);
+  }
+
+  body.signboard-page::after {
+    width: calc(100vw - 1rem);
+    height: 110px;
   }
 }

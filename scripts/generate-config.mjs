@@ -49,7 +49,7 @@ const configContent = `window.APP_CONFIG = ${JSON.stringify(
     APPS_SCRIPT_URL: env.APPS_SCRIPT_URL,
     GUESTBOOK_APPS_SCRIPT_URL: env.GUESTBOOK_APPS_SCRIPT_URL || "",
     WEDDING_ACCESS_PASSWORD: env.WEDDING_ACCESS_PASSWORD,
-    VERSION: env.VERSION || "v1.2.1",
+    VERSION: env.VERSION || "v1.7.10 (1614)",
     BANK: {
       CODE: env.BANK_CODE || "",
       ACCOUNT: env.BANK_ACCOUNT || "",

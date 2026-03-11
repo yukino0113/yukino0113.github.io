@@ -20,7 +20,7 @@ let donateDraft = null;
 let isSubmitting = false;
 
 if (footerVersion) {
-  footerVersion.textContent = config.VERSION || "v1.2.1";
+  footerVersion.textContent = config.VERSION || "v1.7.10 (1614)";
 }
 if (bankCodeNode) {
   bankCodeNode.textContent = config.BANK?.CODE || "-";
