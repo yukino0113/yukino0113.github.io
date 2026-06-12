@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Jethro & Ivy Wedding Invitation</title>
+    <meta name="description" content="Jethro and Ivy interactive MAIMAI wedding invitation" />
+    <link rel="preload" as="image" href="assets/images/invitation/2.png" />
+    <link rel="preload" as="image" href="assets/images/invitation/1.png" />
+    <link rel="stylesheet" href="assets/css/maimai-invitation.css" />
+  </head>
+  <body>
+    <main class="invitation-app" aria-label="Interactive MAIMAI wedding invitation">
+      <canvas class="spark-canvas" id="spark-canvas" aria-hidden="true"></canvas>
+
+      <section class="scene-shell" aria-label="Rotatable invitation scene">
+        <div class="scene" id="scene">
+          <article
+            class="machine"
+            id="machine"
+            style="--yaw: 0deg; --pitch: 0deg; --open: 0; --shift: 0px; --left-slide: 100%; --right-slide: -100%; --panel-flip: 0deg;"
+          >
+            <div class="spread-shadow" aria-hidden="true"></div>
+
+            <div class="center-inside" aria-label="Invitation center page"></div>
+            <div class="center-back-closed" aria-hidden="true"></div>
+            <div class="center-back-open" aria-hidden="true"></div>
+            <button class="pull-panel pull-left" type="button" data-door="left" aria-label="Drag the left pull page open">
+              <span class="pull-face" aria-hidden="true"></span>
+              <span class="pull-grip" aria-hidden="true"></span>
+            </button>
+            <button class="pull-panel pull-right" type="button" data-door="right" aria-label="Drag the right pull page open">
+              <span class="pull-face" aria-hidden="true"></span>
+              <span class="pull-grip" aria-hidden="true"></span>
+            </button>
+            <div class="center-cover" aria-label="MAIMAI front page"></div>
+          </article>
+        </div>
+      </section>
+
+      <aside class="hud" aria-label="Invitation controls">
+        <div>
+          <span class="hud-label">Drag outside</span>
+          <strong>360 rotate</strong>
+        </div>
+        <div>
+          <span class="hud-label">Drag sides</span>
+          <strong>pull open</strong>
+        </div>
+        <div class="hud-actions">
+          <button type="button" id="toggle-open">Open</button>
+          <button type="button" id="reset-view">Reset</button>
+        </div>
+      </aside>
+    </main>
+
+    <script defer src="assets/js/maimai-invitation.js"></script>
+  </body>
+</html>

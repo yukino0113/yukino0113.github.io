@@ -13,6 +13,7 @@ const entries = [
   "submitted.html",
   "guestbook.html",
   "donate.html",
+  "maimai-invitation.html",
   "guestbook-thanks.html",
   "config.js",
   "assets"
