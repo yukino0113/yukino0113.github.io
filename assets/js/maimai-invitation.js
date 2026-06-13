@@ -1,8 +1,10 @@
 const machine = document.getElementById("machine");
 const scene = document.getElementById("scene");
+const sceneShell = document.querySelector(".scene-shell");
 const app = document.querySelector(".invitation-app");
 const toggleOpenButton = document.getElementById("toggle-open");
 const resetViewButton = document.getElementById("reset-view");
+const orientationHint = document.getElementById("orientation-hint");
 const canvas = document.getElementById("spark-canvas");
 const ctx = canvas.getContext("2d");
 
@@ -11,30 +13,53 @@ const state = {
   pitch: 0,
   open: 0,
   closedWidth: 0,
+  viewScale: 1,
+  viewX: 0,
+  viewY: 0,
   mode: null,
   pointerId: null,
+  activePointers: new Map(),
   startX: 0,
   startY: 0,
   startYaw: 0,
   startPitch: 0,
   startOpen: 0,
+  gestureStartDistance: 0,
+  gestureStartCenterX: 0,
+  gestureStartCenterY: 0,
+  gestureStartScale: 1,
+  gestureStartViewX: 0,
+  gestureStartViewY: 0,
   reduceMotion: globalThis.matchMedia("(prefers-reduced-motion: reduce)").matches
 };
 
 const sparks = Array.from({ length: state.reduceMotion ? 0 : 42 }, () => createSpark());
 
 applyMachineState();
+applyViewState();
 updateLayout();
+updateOrientationHint();
 resizeCanvas();
 drawSparks();
 
 globalThis.addEventListener("resize", () => {
   updateLayout();
+  clampViewToScreen();
+  applyViewState();
+  updateOrientationHint();
   resizeCanvas();
 });
 
 app.addEventListener("pointerdown", (event) => {
   if (event.target.closest(".hud")) {
+    return;
+  }
+
+  state.activePointers.set(event.pointerId, pointerPoint(event));
+  event.currentTarget.setPointerCapture(event.pointerId);
+
+  if (state.activePointers.size >= 2) {
+    beginGesture();
     return;
   }
 
@@ -57,10 +82,18 @@ app.addEventListener("pointerdown", (event) => {
   state.mode = door && !isBackFacing() ? "door" : canOpenFromHere ? "door" : "rotate";
   machine.classList.add("is-dragging");
   scene.classList.toggle("is-rotating", state.mode === "rotate");
-  event.currentTarget.setPointerCapture(event.pointerId);
 });
 
 app.addEventListener("pointermove", (event) => {
+  if (state.activePointers.has(event.pointerId)) {
+    state.activePointers.set(event.pointerId, pointerPoint(event));
+  }
+
+  if (state.mode === "gesture") {
+    updateGesture();
+    return;
+  }
+
   if (event.pointerId !== state.pointerId || !state.mode) {
     return;
   }
@@ -95,10 +128,29 @@ resetViewButton.addEventListener("click", () => {
   state.yaw = 0;
   state.pitch = 0;
   state.open = 0;
+  state.viewScale = 1;
+  state.viewX = 0;
+  state.viewY = 0;
   applyMachineState();
+  applyViewState();
 });
 
 function endPointer(event) {
+  state.activePointers.delete(event.pointerId);
+
+  if (state.mode === "gesture") {
+    sceneShell.classList.remove("is-gesturing");
+    if (state.activePointers.size >= 2) {
+      beginGesture();
+      return;
+    }
+    state.pointerId = null;
+    state.mode = null;
+    machine.classList.remove("is-dragging");
+    scene.classList.remove("is-rotating");
+    return;
+  }
+
   if (event.pointerId !== state.pointerId) {
     return;
   }
@@ -122,8 +174,49 @@ function applyMachineState() {
   machine.style.setProperty("--right-slide", `${(1 - state.open) * -100}%`);
   machine.style.setProperty("--panel-flip", `${180 * state.open}deg`);
   machine.classList.toggle("is-back-facing", isBackFacing());
-  toggleOpenButton.textContent = state.open > 0.5 ? "Close" : "Open";
+  toggleOpenButton.textContent = state.open > 0.5 ? "關閉" : "打開";
   updateLayout();
+}
+
+function applyViewState() {
+  sceneShell.style.setProperty("--view-scale", `${state.viewScale}`);
+  sceneShell.style.setProperty("--view-x", `${state.viewX}px`);
+  sceneShell.style.setProperty("--view-y", `${state.viewY}px`);
+}
+
+function beginGesture() {
+  const points = getGesturePoints();
+  if (!points) {
+    return;
+  }
+
+  state.mode = "gesture";
+  state.pointerId = null;
+  state.gestureStartDistance = distance(points[0], points[1]);
+  const center = midpoint(points[0], points[1]);
+  state.gestureStartCenterX = center.x;
+  state.gestureStartCenterY = center.y;
+  state.gestureStartScale = state.viewScale;
+  state.gestureStartViewX = state.viewX;
+  state.gestureStartViewY = state.viewY;
+  machine.classList.add("is-dragging");
+  scene.classList.remove("is-rotating");
+  sceneShell.classList.add("is-gesturing");
+}
+
+function updateGesture() {
+  const points = getGesturePoints();
+  if (!points || !state.gestureStartDistance) {
+    return;
+  }
+
+  const currentDistance = distance(points[0], points[1]);
+  const currentCenter = midpoint(points[0], points[1]);
+  state.viewScale = clamp(state.gestureStartScale * (currentDistance / state.gestureStartDistance), 0.72, 2.6);
+  state.viewX = state.gestureStartViewX + currentCenter.x - state.gestureStartCenterX;
+  state.viewY = state.gestureStartViewY + currentCenter.y - state.gestureStartCenterY;
+  clampViewToScreen();
+  applyViewState();
 }
 
 function isBackFacing() {
@@ -150,6 +243,44 @@ function updateLayout() {
   scene.style.height = `${sceneHeight}px`;
   machine.style.width = `${machineWidth}px`;
   machine.style.setProperty("--shift", `${machineShift}px`);
+}
+
+function updateOrientationHint() {
+  const shouldShow = globalThis.innerWidth < globalThis.innerHeight;
+  orientationHint.hidden = !shouldShow;
+}
+
+function clampViewToScreen() {
+  const maxX = globalThis.innerWidth * 0.9 * state.viewScale;
+  const maxY = globalThis.innerHeight * 0.7 * state.viewScale;
+  state.viewX = clamp(state.viewX, -maxX, maxX);
+  state.viewY = clamp(state.viewY, -maxY, maxY);
+}
+
+function getGesturePoints() {
+  const points = Array.from(state.activePointers.values());
+  if (points.length < 2) {
+    return null;
+  }
+  return [points[0], points[1]];
+}
+
+function pointerPoint(event) {
+  return {
+    x: event.clientX,
+    y: event.clientY
+  };
+}
+
+function distance(a, b) {
+  return Math.hypot(a.x - b.x, a.y - b.y);
+}
+
+function midpoint(a, b) {
+  return {
+    x: (a.x + b.x) / 2,
+    y: (a.y + b.y) / 2
+  };
 }
 
 function clamp(value, min, max) {
