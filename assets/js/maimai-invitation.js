@@ -5,8 +5,10 @@ const app = document.querySelector(".invitation-app");
 const toggleOpenButton = document.getElementById("toggle-open");
 const resetViewButton = document.getElementById("reset-view");
 const orientationHint = document.getElementById("orientation-hint");
+const closedFrontCover = document.querySelector(".closed-front-cover");
 const canvas = document.getElementById("spark-canvas");
 const ctx = canvas.getContext("2d");
+const foldedAspectRatio = 850.499992 / 594.95996;
 
 const state = {
   yaw: 0,
@@ -173,6 +175,9 @@ function applyMachineState() {
   machine.style.setProperty("--left-slide", `${(1 - state.open) * 100}%`);
   machine.style.setProperty("--right-slide", `${(1 - state.open) * -100}%`);
   machine.style.setProperty("--panel-flip", `${180 * state.open}deg`);
+  machine.style.setProperty("--seam-overlap", "0px");
+  closedFrontCover.style.opacity = `${1 - state.open}`;
+  closedFrontCover.style.visibility = state.open > 0.02 ? "hidden" : "visible";
   machine.classList.toggle("is-back-facing", isBackFacing());
   toggleOpenButton.textContent = state.open > 0.5 ? "關閉" : "打開";
   updateLayout();
@@ -228,14 +233,14 @@ function updateLayout() {
   const viewportHeight = globalThis.innerHeight;
   const isDesktop = viewportWidth >= 760;
   const maxOpenWidth = isDesktop ? viewportWidth * 0.9 : viewportWidth * 0.96;
-  const maxClosedByHeight = viewportHeight * (viewportWidth >= 760 ? 0.72 : 0.32) * (1000 / 1415);
+  const maxClosedByHeight = viewportHeight * (viewportWidth >= 760 ? 0.72 : 0.32) / foldedAspectRatio;
   const maxClosedByWidth = maxOpenWidth / 2;
   const preferredClosed = isDesktop ? 700 : viewportWidth * 0.48;
   const minClosed = isDesktop ? 280 : 168;
   state.closedWidth = Math.max(minClosed, Math.min(preferredClosed, maxClosedByWidth, maxClosedByHeight || preferredClosed));
 
   const sceneWidth = state.closedWidth * (1 + state.open);
-  const sceneHeight = state.closedWidth * (1415 / 1000);
+  const sceneHeight = state.closedWidth * foldedAspectRatio;
   const machineWidth = state.closedWidth * 2;
   const machineShift = -state.closedWidth * 0.5 * (1 - state.open);
 

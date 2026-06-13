@@ -5,9 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Jethro & Ivy Wedding Invitation</title>
     <meta name="description" content="Jethro and Ivy interactive MAIMAI wedding invitation" />
-    <link rel="preload" as="image" href="assets/images/invitation/2.png" />
-    <link rel="preload" as="image" href="assets/images/invitation/1.png" />
-    <link rel="stylesheet" href="assets/css/maimai-invitation.css" />
+    <link rel="preload" as="image" href="assets/images/invitation/2.svg" />
+    <link rel="preload" as="image" href="assets/images/invitation/1.svg" />
+    <link rel="stylesheet" href="assets/css/maimai-invitation.css?v=cover-seam-nudge" />
   </head>
   <body>
     <main class="invitation-app" aria-label="Interactive MAIMAI wedding invitation">
@@ -18,13 +18,14 @@
           <article
             class="machine"
             id="machine"
-            style="--yaw: 0deg; --pitch: 0deg; --open: 0; --shift: 0px; --left-slide: 100%; --right-slide: -100%; --panel-flip: 0deg;"
+            style="--yaw: 0deg; --pitch: 0deg; --open: 0; --shift: 0px; --left-slide: 100%; --right-slide: -100%; --panel-flip: 0deg; --seam-overlap: 0px; --closed-cover-opacity: 1;"
           >
             <div class="spread-shadow" aria-hidden="true"></div>
 
             <div class="center-inside" aria-label="Invitation center page"></div>
             <div class="center-back-closed" aria-hidden="true"></div>
             <div class="center-back-open" aria-hidden="true"></div>
+            <div class="closed-front-cover" aria-hidden="true" style="opacity: 1; visibility: visible;"></div>
             <button class="pull-panel pull-left" type="button" data-door="left" aria-label="Drag the left pull page open">
               <span class="pull-face" aria-hidden="true"></span>
               <span class="pull-grip" aria-hidden="true"></span>
@@ -63,6 +64,6 @@
       </aside>
     </main>
 
-    <script defer src="assets/js/maimai-invitation.js"></script>
+    <script defer src="assets/js/maimai-invitation.js?v=cover-seam-nudge"></script>
   </body>
 </html>

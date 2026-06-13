@@ -123,6 +123,7 @@ button {
 .center-inside,
 .center-back-closed,
 .center-back-open,
+.closed-front-cover,
 .center-cover,
 .pull-panel {
   position: absolute;
@@ -139,7 +140,7 @@ button {
   left: 0;
   z-index: 2;
   width: 100%;
-  background: url("../images/invitation/1.png") center / 100% 100% no-repeat;
+  background: url("../images/invitation/1.svg") center / 100% 100% no-repeat;
   opacity: var(--open);
   transform: translateZ(2px);
   transition: opacity 260ms ease;
@@ -149,7 +150,7 @@ button {
   left: 25%;
   z-index: 3;
   width: 50%;
-  background: url("../images/invitation/2.png") center / 200% 100% no-repeat;
+  background: url("../images/invitation/2.svg") center / 200% 100% no-repeat;
   opacity: calc(1 - var(--open));
   transform: rotateY(180deg) translateZ(4px);
   transition: opacity 260ms ease;
@@ -159,7 +160,7 @@ button {
   left: 0;
   z-index: 4;
   width: 100%;
-  background: url("../images/invitation/2.png") center / 100% 100% no-repeat;
+  background: url("../images/invitation/2.svg") center / 100% 100% no-repeat;
   opacity: var(--open);
   transform: rotateY(180deg) translateZ(3px);
   transition: opacity 260ms ease;
@@ -167,6 +168,41 @@ button {
 
 .center-cover {
   display: none;
+}
+
+.closed-front-cover {
+  left: 25%;
+  z-index: 7;
+  width: 50%;
+  pointer-events: none;
+  transform: translateZ(11px);
+  transition: opacity 260ms ease;
+}
+
+.closed-front-cover::before,
+.closed-front-cover::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  width: 50%;
+  height: 100%;
+  background-image: url("../images/invitation/2.svg");
+  background-repeat: no-repeat;
+  background-size: 400% 100%;
+}
+
+.closed-front-cover::before {
+  left: 0;
+  border-radius: 18px 0 0 18px;
+  background-position: right center;
+  transform: translateX(1px);
+}
+
+.closed-front-cover::after {
+  right: 0;
+  border-radius: 0 18px 18px 0;
+  background-position: left center;
+  transform: translateX(-1px);
 }
 
 .pull-panel {
@@ -183,13 +219,13 @@ button {
 .pull-left {
   left: 0;
   transform-origin: right center;
-  transform: translateX(var(--left-slide)) translateZ(12px);
+  transform: translateX(calc(var(--left-slide) + var(--seam-overlap, 0px))) translateZ(12px);
 }
 
 .pull-right {
   right: 0;
   transform-origin: left center;
-  transform: translateX(var(--right-slide)) translateZ(12px);
+  transform: translateX(calc(var(--right-slide) - var(--seam-overlap, 0px))) translateZ(12px);
 }
 
 .pull-face {
@@ -207,14 +243,18 @@ button {
   position: absolute;
   inset: 0;
   display: block;
-  background-image: url("../images/invitation/2.png");
+  background-image: url("../images/invitation/2.svg");
   background-repeat: no-repeat;
   background-size: 400% 100%;
   backface-visibility: hidden;
 }
 
+.pull-face::before {
+  opacity: var(--open);
+}
+
 .pull-face::after {
-  background-image: url("../images/invitation/1.png");
+  background-image: url("../images/invitation/1.svg");
   opacity: var(--open);
   transform: rotateY(180deg);
 }
@@ -248,7 +288,8 @@ button {
 }
 
 .machine.is-back-facing .pull-panel,
-.machine.is-back-facing .center-inside {
+.machine.is-back-facing .center-inside,
+.machine.is-back-facing .closed-front-cover {
   opacity: 0;
   pointer-events: none;
 }
