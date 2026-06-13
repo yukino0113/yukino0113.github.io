@@ -139,7 +139,7 @@ button {
   left: 0;
   z-index: 2;
   width: 100%;
-  background: url("../images/invitation/1.svg") center / 100% 100% no-repeat;
+  background: url("../images/invitation/1.png") center / 100% 100% no-repeat;
   opacity: var(--open);
   transform: translateZ(2px);
   transition: opacity 260ms ease;
@@ -149,7 +149,7 @@ button {
   left: 25%;
   z-index: 3;
   width: 50%;
-  background: url("../images/invitation/2.svg") center / 200% 100% no-repeat;
+  background: url("../images/invitation/2.png") center / 200% 100% no-repeat;
   opacity: calc(1 - var(--open));
   transform: rotateY(180deg) translateZ(4px);
   transition: opacity 260ms ease;
@@ -159,7 +159,7 @@ button {
   left: 0;
   z-index: 4;
   width: 100%;
-  background: url("../images/invitation/2.svg") center / 100% 100% no-repeat;
+  background: url("../images/invitation/2.png") center / 100% 100% no-repeat;
   opacity: var(--open);
   transform: rotateY(180deg) translateZ(3px);
   transition: opacity 260ms ease;
@@ -207,14 +207,14 @@ button {
   position: absolute;
   inset: 0;
   display: block;
-  background-image: url("../images/invitation/2.svg");
+  background-image: url("../images/invitation/2.png");
   background-repeat: no-repeat;
   background-size: 400% 100%;
   backface-visibility: hidden;
 }
 
 .pull-face::after {
-  background-image: url("../images/invitation/1.svg");
+  background-image: url("../images/invitation/1.png");
   opacity: var(--open);
   transform: rotateY(180deg);
 }
