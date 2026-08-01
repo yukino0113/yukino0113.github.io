@@ -70,6 +70,7 @@ app.addEventListener("pointerdown", (event) => {
     return;
   }
 
+  stopBrowserGesture(event);
   state.activePointers.set(event.pointerId, pointerPoint(event));
   event.currentTarget.setPointerCapture(event.pointerId);
 
@@ -100,6 +101,12 @@ app.addEventListener("pointerdown", (event) => {
 });
 
 app.addEventListener("pointermove", (event) => {
+  if (!state.activePointers.has(event.pointerId) && event.pointerId !== state.pointerId) {
+    return;
+  }
+
+  stopBrowserGesture(event);
+
   if (state.activePointers.has(event.pointerId)) {
     state.activePointers.set(event.pointerId, pointerPoint(event));
   }
@@ -156,6 +163,12 @@ function setHudCollapsed(collapsed) {
   toggleHudButton.setAttribute("aria-expanded", `${!collapsed}`);
   toggleHudButton.textContent = collapsed ? "功能" : "收合";
   toggleHudButton.setAttribute("aria-label", collapsed ? "展開功能表" : "收合功能表");
+}
+
+function stopBrowserGesture(event) {
+  if (event.cancelable) {
+    event.preventDefault();
+  }
 }
 
 function endPointer(event) {

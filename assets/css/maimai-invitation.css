@@ -37,6 +37,7 @@ button {
   place-items: center;
   padding: clamp(16px, 4vw, 44px);
   isolation: isolate;
+  touch-action: none;
   background:
     radial-gradient(circle at 16% 18%, rgba(255, 216, 239, 0.9), transparent 28%),
     radial-gradient(circle at 84% 14%, rgba(185, 239, 255, 0.9), transparent 26%),
@@ -70,6 +71,7 @@ button {
   width: min(94vw, 1180px);
   display: grid;
   place-items: center;
+  touch-action: none;
   transform: translate3d(var(--view-x, 0px), var(--view-y, 0px), 0) scale(var(--view-scale, 1));
   transform-origin: center center;
   transition: transform 140ms ease-out;
@@ -210,6 +212,7 @@ button {
   width: 25%;
   cursor: ew-resize;
   background: transparent;
+  touch-action: none;
   transform-style: preserve-3d;
   backface-visibility: visible;
   transition:
@@ -432,6 +435,7 @@ button {
   text-align: center;
   box-shadow: 0 12px 34px rgba(25, 29, 38, 0.12);
   backdrop-filter: blur(16px);
+  pointer-events: none;
   transform: translateX(-50%);
 }
 
