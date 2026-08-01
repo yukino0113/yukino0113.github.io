@@ -2,6 +2,8 @@ const machine = document.getElementById("machine");
 const scene = document.getElementById("scene");
 const sceneShell = document.querySelector(".scene-shell");
 const app = document.querySelector(".invitation-app");
+const hud = document.querySelector(".hud");
+const toggleHudButton = document.getElementById("toggle-hud");
 const toggleOpenButton = document.getElementById("toggle-open");
 const resetViewButton = document.getElementById("reset-view");
 const orientationHint = document.getElementById("orientation-hint");
@@ -32,11 +34,14 @@ const state = {
   gestureStartScale: 1,
   gestureStartViewX: 0,
   gestureStartViewY: 0,
+  hudCollapsed: shouldPreferCollapsedHud(),
+  hudTouched: false,
   reduceMotion: globalThis.matchMedia("(prefers-reduced-motion: reduce)").matches
 };
 
 const sparks = Array.from({ length: state.reduceMotion ? 0 : 42 }, () => createSpark());
 
+setHudCollapsed(state.hudCollapsed);
 applyMachineState();
 applyViewState();
 updateLayout();
@@ -45,11 +50,19 @@ resizeCanvas();
 drawSparks();
 
 globalThis.addEventListener("resize", () => {
+  if (!state.hudTouched) {
+    setHudCollapsed(shouldPreferCollapsedHud());
+  }
   updateLayout();
   clampViewToScreen();
   applyViewState();
   updateOrientationHint();
   resizeCanvas();
+});
+
+toggleHudButton.addEventListener("click", () => {
+  state.hudTouched = true;
+  setHudCollapsed(!state.hudCollapsed);
 });
 
 app.addEventListener("pointerdown", (event) => {
@@ -136,6 +149,14 @@ resetViewButton.addEventListener("click", () => {
   applyMachineState();
   applyViewState();
 });
+
+function setHudCollapsed(collapsed) {
+  state.hudCollapsed = collapsed;
+  hud.classList.toggle("is-collapsed", collapsed);
+  toggleHudButton.setAttribute("aria-expanded", `${!collapsed}`);
+  toggleHudButton.textContent = collapsed ? "功能" : "收合";
+  toggleHudButton.setAttribute("aria-label", collapsed ? "展開功能表" : "收合功能表");
+}
 
 function endPointer(event) {
   state.activePointers.delete(event.pointerId);
@@ -253,6 +274,10 @@ function updateLayout() {
 function updateOrientationHint() {
   const shouldShow = globalThis.innerWidth < globalThis.innerHeight;
   orientationHint.hidden = !shouldShow;
+}
+
+function shouldPreferCollapsedHud() {
+  return globalThis.innerWidth <= 760 || globalThis.innerHeight <= 520;
 }
 
 function clampViewToScreen() {
