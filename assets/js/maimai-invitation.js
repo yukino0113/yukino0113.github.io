@@ -219,6 +219,7 @@ function applyMachineState() {
   closedFrontCover.style.visibility = state.open > 0.02 ? "hidden" : "visible";
   machine.classList.toggle("is-back-facing", isBackFacing());
   toggleOpenButton.textContent = state.open > 0.5 ? "關閉" : "打開";
+  machine.classList.toggle("is-open", state.open > 0.02);
   updateLayout();
   emitInvitationEvent("invitation:state-changed", {
     open: state.open,

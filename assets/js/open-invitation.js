@@ -25,6 +25,14 @@ const ACHIEVEMENTS = Object.freeze({
   "page-and-back": {
     title: "探索喜帖",
     description: "完成載入頁面與轉到背面兩項成就。"
+  },
+  "eevee-any": {
+    title: "伊布發現者",
+    description: "點擊任意一隻外頁伊布。"
+  },
+  "eevee-10-in-5s": {
+    title: "伊布連打",
+    description: "在 5 秒內點擊外頁伊布 10 次。"
   }
 });
 
@@ -104,6 +112,7 @@ class AchievementEngine {
     this.unlocked = this.loadUnlocked();
     this.hasOpenedSinceLastClose = false;
     this.cycleTimestamps = [];
+    this.eeveeClickTimestamps = [];
     this.wasBackFacing = false;
     this.wasEdgeOn = false;
   }
@@ -148,6 +157,24 @@ class AchievementEngine {
 
     this.wasBackFacing = isBackFacing;
     this.wasEdgeOn = isEdgeOn;
+  }
+
+  handleHotspotClicked(detail) {
+    if (detail.kind !== "eevee") {
+      return;
+    }
+
+    this.unlock("eevee-any");
+
+    const now = Date.now();
+    this.eeveeClickTimestamps = this.eeveeClickTimestamps.filter(
+      (timestamp) => now - timestamp <= CYCLE_WINDOW_MS
+    );
+    this.eeveeClickTimestamps.push(now);
+
+    if (this.eeveeClickTimestamps.length >= 10) {
+      this.unlock("eevee-10-in-5s");
+    }
   }
 
   unlock(id) {
@@ -209,6 +236,29 @@ globalThis.addEventListener("invitation:closed", () => {
 
 globalThis.addEventListener("invitation:state-changed", (event) => {
   achievementEngine.handleStateChanged(event.detail || {});
+});
+
+document.querySelectorAll("[data-hotspot-kind]").forEach((hotspot) => {
+  hotspot.addEventListener("pointerdown", (event) => {
+    event.stopPropagation();
+  });
+
+  hotspot.addEventListener("click", (event) => {
+    event.stopPropagation();
+    globalThis.dispatchEvent(
+      new CustomEvent("invitation:hotspot-clicked", {
+        detail: {
+          id: hotspot.dataset.hotspotId,
+          kind: hotspot.dataset.hotspotKind,
+          surface: hotspot.dataset.hotspotSurface
+        }
+      })
+    );
+  });
+});
+
+globalThis.addEventListener("invitation:hotspot-clicked", (event) => {
+  achievementEngine.handleHotspotClicked(event.detail || {});
 });
 
 // Defer scripts execute before DOMContentLoaded. This is a fallback if the core

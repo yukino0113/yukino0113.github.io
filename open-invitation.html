@@ -10,6 +10,7 @@
     <link rel="preload" as="image" href="assets/images/invitation/1.svg" />
     <link rel="stylesheet" href="assets/css/maimai-invitation.css?v=android-touch-fix" />
     <link rel="stylesheet" href="assets/css/open-invitation-achievements.css?v=achievements-v1" />
+    <link rel="stylesheet" href="assets/css/open-invitation-hotspots.css?v=eevee-hotspots-v1" />
   </head>
   <body>
     <main class="invitation-app" aria-label="Interactive MAIMAI wedding invitation">
@@ -37,6 +38,63 @@
               <span class="pull-grip" aria-hidden="true"></span>
             </button>
             <div class="center-cover" aria-label="MAIMAI front page"></div>
+
+            <div class="outer-eevee-hotspot-layer outer-eevee-front-layer" aria-label="外頁伊布">
+              <button
+                class="outer-eevee-hotspot outer-eevee-front-left"
+                type="button"
+                data-hotspot-id="outer-eevee-left"
+                data-hotspot-kind="eevee"
+                data-hotspot-surface="front-closed"
+                aria-label="點擊左側外頁伊布"
+              ></button>
+              <button
+                class="outer-eevee-hotspot outer-eevee-front-right"
+                type="button"
+                data-hotspot-id="outer-eevee-right"
+                data-hotspot-kind="eevee"
+                data-hotspot-surface="front-closed"
+                aria-label="點擊右側外頁伊布"
+              ></button>
+            </div>
+
+            <div class="outer-eevee-hotspot-layer outer-eevee-back-closed-layer" aria-label="外頁伊布背面">
+              <button
+                class="outer-eevee-hotspot outer-eevee-back-center"
+                type="button"
+                data-hotspot-id="outer-eevee-center"
+                data-hotspot-kind="eevee"
+                data-hotspot-surface="back-closed"
+                aria-label="點擊中間外頁伊布"
+              ></button>
+            </div>
+
+            <div class="outer-eevee-hotspot-layer outer-eevee-back-open-layer" aria-label="外頁伊布背面展開">
+              <button
+                class="outer-eevee-hotspot outer-eevee-back-left"
+                type="button"
+                data-hotspot-id="outer-eevee-left"
+                data-hotspot-kind="eevee"
+                data-hotspot-surface="back-open"
+                aria-label="點擊左側外頁伊布"
+              ></button>
+              <button
+                class="outer-eevee-hotspot outer-eevee-back-center-open"
+                type="button"
+                data-hotspot-id="outer-eevee-center"
+                data-hotspot-kind="eevee"
+                data-hotspot-surface="back-open"
+                aria-label="點擊中間外頁伊布"
+              ></button>
+              <button
+                class="outer-eevee-hotspot outer-eevee-back-right"
+                type="button"
+                data-hotspot-id="outer-eevee-right"
+                data-hotspot-kind="eevee"
+                data-hotspot-surface="back-open"
+                aria-label="點擊右側外頁伊布"
+              ></button>
+            </div>
           </article>
         </div>
       </section>
@@ -84,7 +142,7 @@
       aria-atomic="false"
     ></div>
 
-    <script defer src="assets/js/open-invitation.js?v=achievements-v1"></script>
-    <script defer src="assets/js/maimai-invitation.js?v=android-touch-fix"></script>
+    <script defer src="assets/js/open-invitation.js?v=achievements-v2-eevee"></script>
+    <script defer src="assets/js/maimai-invitation.js?v=android-touch-fix-v2-hotspots"></script>
   </body>
 </html>
