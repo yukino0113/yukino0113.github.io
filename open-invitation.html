@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Jethro & Ivy Wedding Invitation</title>
+    <meta name="description" content="Jethro and Ivy interactive MAIMAI wedding invitation" />
+    <link rel="icon" href="data:," />
+    <link rel="preload" as="image" href="assets/images/invitation/2.svg" />
+    <link rel="preload" as="image" href="assets/images/invitation/1.svg" />
+    <link rel="stylesheet" href="assets/css/maimai-invitation.css?v=android-touch-fix" />
+    <link rel="stylesheet" href="assets/css/open-invitation-achievements.css?v=achievements-v1" />
+  </head>
+  <body>
+    <main class="invitation-app" aria-label="Interactive MAIMAI wedding invitation">
+      <canvas class="spark-canvas" id="spark-canvas" aria-hidden="true"></canvas>
+
+      <section class="scene-shell" aria-label="Rotatable invitation scene">
+        <div class="scene" id="scene">
+          <article
+            class="machine"
+            id="machine"
+            style="--yaw: 0deg; --pitch: 0deg; --open: 0; --shift: 0px; --left-slide: 100%; --right-slide: -100%; --panel-flip: 0deg; --seam-overlap: 0px; --closed-cover-opacity: 1;"
+          >
+            <div class="spread-shadow" aria-hidden="true"></div>
+
+            <div class="center-inside" aria-label="Invitation center page"></div>
+            <div class="center-back-closed" aria-hidden="true"></div>
+            <div class="center-back-open" aria-hidden="true"></div>
+            <div class="closed-front-cover" aria-hidden="true" style="opacity: 1; visibility: visible;"></div>
+            <button class="pull-panel pull-left" type="button" data-door="left" aria-label="Drag the left pull page open">
+              <span class="pull-face" aria-hidden="true"></span>
+              <span class="pull-grip" aria-hidden="true"></span>
+            </button>
+            <button class="pull-panel pull-right" type="button" data-door="right" aria-label="Drag the right pull page open">
+              <span class="pull-face" aria-hidden="true"></span>
+              <span class="pull-grip" aria-hidden="true"></span>
+            </button>
+            <div class="center-cover" aria-label="MAIMAI front page"></div>
+          </article>
+        </div>
+      </section>
+
+      <div class="orientation-hint" id="orientation-hint" role="status" aria-live="polite" hidden>
+        <strong>建議旋轉螢幕</strong>
+        <span>橫向觀看較完整，手機可用雙指移動與縮放。</span>
+      </div>
+
+      <aside class="hud" aria-label="Invitation controls">
+        <button
+          class="hud-toggle"
+          type="button"
+          id="toggle-hud"
+          aria-expanded="true"
+          aria-controls="hud-content"
+        >
+          收合
+        </button>
+        <div class="hud-content" id="hud-content">
+          <div class="hud-row">
+            <span class="hud-label">單指拖曳</span>
+            <strong>旋轉喜帖</strong>
+          </div>
+          <div class="hud-row">
+            <span class="hud-label">左右拖曳</span>
+            <strong>拉開折頁</strong>
+          </div>
+          <div class="hud-row">
+            <span class="hud-label">雙指手勢</span>
+            <strong>移動 / 縮放</strong>
+          </div>
+          <div class="hud-actions">
+            <button type="button" id="toggle-open">打開</button>
+            <button type="button" id="reset-view">重置</button>
+          </div>
+        </div>
+      </aside>
+    </main>
+
+    <div
+      class="achievement-toast-region"
+      id="achievement-toast-region"
+      aria-live="polite"
+      aria-atomic="false"
+    ></div>
+
+    <script defer src="assets/js/open-invitation.js?v=achievements-v1"></script>
+    <script defer src="assets/js/maimai-invitation.js?v=android-touch-fix"></script>
+  </body>
+</html>

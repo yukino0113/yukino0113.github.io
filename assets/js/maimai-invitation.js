@@ -16,6 +16,7 @@ const state = {
   yaw: 0,
   pitch: 0,
   open: 0,
+  committedOpen: 0,
   closedWidth: 0,
   viewScale: 1,
   viewX: 0,
@@ -48,6 +49,11 @@ updateLayout();
 updateOrientationHint();
 resizeCanvas();
 drawSparks();
+emitInvitationEvent("invitation:page-loaded", {
+  open: state.open,
+  yaw: state.yaw,
+  pitch: state.pitch
+});
 
 globalThis.addEventListener("resize", () => {
   if (!state.hudTouched) {
@@ -142,14 +148,14 @@ toggleOpenButton.addEventListener("click", () => {
   if (isBackFacing()) {
     return;
   }
-  state.open = state.open > 0.5 ? 0 : 1;
-  applyMachineState();
+  commitOpenState(state.open > 0.5 ? 0 : 1);
 });
 
 resetViewButton.addEventListener("click", () => {
   state.yaw = 0;
   state.pitch = 0;
   state.open = 0;
+  state.committedOpen = 0;
   state.viewScale = 1;
   state.viewX = 0;
   state.viewY = 0;
@@ -192,8 +198,7 @@ function endPointer(event) {
   }
 
   if (state.mode === "door") {
-    state.open = state.open > 0.38 ? 1 : 0;
-    applyMachineState();
+    commitOpenState(state.open > 0.38 ? 1 : 0);
   }
 
   state.pointerId = null;
@@ -215,6 +220,13 @@ function applyMachineState() {
   machine.classList.toggle("is-back-facing", isBackFacing());
   toggleOpenButton.textContent = state.open > 0.5 ? "關閉" : "打開";
   updateLayout();
+  emitInvitationEvent("invitation:state-changed", {
+    open: state.open,
+    yaw: state.yaw,
+    pitch: state.pitch,
+    isBackFacing: isBackFacing(),
+    isEdgeOn: isEdgeOn()
+  });
 }
 
 function applyViewState() {
@@ -260,6 +272,31 @@ function updateGesture() {
 
 function isBackFacing() {
   return Math.abs(normalizeDegrees(state.yaw)) > 90;
+}
+
+function isEdgeOn() {
+  const absoluteYaw = Math.abs(normalizeDegrees(state.yaw));
+  return Math.abs(absoluteYaw - 90) <= 10;
+}
+
+function emitInvitationEvent(name, detail = {}) {
+  globalThis.dispatchEvent(new CustomEvent(name, { detail }));
+}
+
+function commitOpenState(nextOpen) {
+  const previousOpen = state.committedOpen;
+  state.open = nextOpen;
+  applyMachineState();
+
+  if (previousOpen === nextOpen) {
+    return;
+  }
+
+  state.committedOpen = nextOpen;
+  emitInvitationEvent(nextOpen === 1 ? "invitation:opened" : "invitation:closed", {
+    previousOpen,
+    open: nextOpen
+  });
 }
 
 function updateLayout() {
