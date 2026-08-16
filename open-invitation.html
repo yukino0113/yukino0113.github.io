@@ -7,9 +7,11 @@
     <meta name="description" content="Jethro and Ivy interactive MAIMAI wedding invitation" />
     <link rel="icon" href="data:," />
     <link rel="preload" as="image" href="assets/images/invitation/2.svg" />
-    <link rel="preload" as="image" href="assets/images/invitation/1.svg" />
+    <link rel="preload" as="image" href="assets/images/invitation/1-open.svg" />
     <link rel="stylesheet" href="assets/css/maimai-invitation.css?v=android-touch-fix" />
+    <link rel="stylesheet" href="assets/css/open-invitation-inner.css?v=inner-v2" />
     <link rel="stylesheet" href="assets/css/open-invitation-achievements.css?v=achievements-v1" />
+    <link rel="stylesheet" href="assets/css/open-invitation-achievement-list.css?v=list-v1" />
     <link rel="stylesheet" href="assets/css/open-invitation-hotspots.css?v=eevee-hotspots-v1" />
   </head>
   <body>
@@ -131,9 +133,40 @@
             <button type="button" id="toggle-open">打開</button>
             <button type="button" id="reset-view">重置</button>
           </div>
+          <button
+            class="achievement-launcher"
+            type="button"
+            id="toggle-achievements"
+            aria-expanded="false"
+            aria-controls="achievement-panel"
+          >
+            <span>成就列表</span>
+            <strong id="achievement-progress">0 / 11</strong>
+          </button>
         </div>
       </aside>
     </main>
+
+    <aside
+      class="achievement-panel"
+      id="achievement-panel"
+      aria-labelledby="achievement-panel-title"
+      hidden
+    >
+      <div class="achievement-panel-header">
+        <div>
+          <span class="achievement-panel-kicker">PUBLIC SERVER</span>
+          <h2 id="achievement-panel-title">成就列表</h2>
+        </div>
+        <button class="achievement-panel-close" type="button" id="close-achievements">
+          關閉
+        </button>
+      </div>
+      <p class="achievement-panel-summary" id="achievement-panel-summary">
+        探索喜帖，解鎖全部秘密。
+      </p>
+      <ol class="achievement-list" id="achievement-list"></ol>
+    </aside>
 
     <div
       class="achievement-toast-region"
@@ -142,7 +175,7 @@
       aria-atomic="false"
     ></div>
 
-    <script defer src="assets/js/open-invitation.js?v=achievements-v2-eevee"></script>
+    <script defer src="assets/js/open-invitation.js?v=achievements-v4-open"></script>
     <script defer src="assets/js/maimai-invitation.js?v=android-touch-fix-v2-hotspots"></script>
   </body>
 </html>

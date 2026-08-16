@@ -1,0 +1,7 @@
+.center-inside {
+  background-image: url("../images/invitation/1-open.svg");
+}
+
+.pull-face::after {
+  background-image: url("../images/invitation/1-open.svg");
+}
