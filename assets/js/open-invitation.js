@@ -141,6 +141,7 @@ class AchievementEngine {
     this.hasOpenedSinceLastClose = false;
     this.cycleTimestamps = [];
     this.eeveeClickTimestamps = [];
+    this.outerEeveeIds = new Set();
     this.wasBackFacing = false;
     this.wasEdgeOn = false;
   }
@@ -188,11 +189,24 @@ class AchievementEngine {
   }
 
   handleHotspotClicked(detail) {
-    if (detail.kind !== "eevee") {
+    if (detail.kind === "coin-slot") {
+      this.unlock("coin-slot");
+      return;
+    }
+
+    const isEeveeTail = detail.kind === "eevee-tail";
+    if (detail.kind !== "eevee" && !isEeveeTail) {
       return;
     }
 
     this.unlock("eevee-any");
+
+    if (detail.scope === "outer" && detail.kind === "eevee" && detail.id) {
+      this.outerEeveeIds.add(detail.id);
+      if (this.outerEeveeIds.size >= 3) {
+        this.unlock("eevee-all");
+      }
+    }
 
     const now = Date.now();
     this.eeveeClickTimestamps = this.eeveeClickTimestamps.filter(
@@ -202,6 +216,10 @@ class AchievementEngine {
 
     if (this.eeveeClickTimestamps.length >= 10) {
       this.unlock("eevee-10-in-5s");
+    }
+
+    if (isEeveeTail) {
+      this.unlock("eevee-tail");
     }
   }
 
@@ -278,6 +296,18 @@ class AchievementEngine {
       this.unlocked.has("back-facing")
     ) {
       this.unlock("page-and-back");
+    }
+
+    this.maybeUnlockAll();
+  }
+
+  maybeUnlockAll() {
+    const requiredIds = Object.keys(this.definitions).filter(
+      (achievementId) => achievementId !== "all-achievements"
+    );
+
+    if (requiredIds.every((achievementId) => this.unlocked.has(achievementId))) {
+      this.unlock("all-achievements");
     }
   }
 
@@ -358,10 +388,6 @@ globalThis.addEventListener("invitation:state-changed", (event) => {
 });
 
 document.querySelectorAll("[data-hotspot-kind]").forEach((hotspot) => {
-  hotspot.addEventListener("pointerdown", (event) => {
-    event.stopPropagation();
-  });
-
   hotspot.addEventListener("click", (event) => {
     event.stopPropagation();
     globalThis.dispatchEvent(
@@ -369,7 +395,8 @@ document.querySelectorAll("[data-hotspot-kind]").forEach((hotspot) => {
         detail: {
           id: hotspot.dataset.hotspotId,
           kind: hotspot.dataset.hotspotKind,
-          surface: hotspot.dataset.hotspotSurface
+          surface: hotspot.dataset.hotspotSurface,
+          scope: hotspot.dataset.hotspotScope
         }
       })
     );
