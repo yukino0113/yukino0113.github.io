@@ -1,0 +1,80 @@
+.embedded-browser-notice {
+  position: fixed;
+  z-index: 20;
+  top: 50%;
+  left: 50%;
+  width: min(440px, calc(100vw - 32px));
+  padding: 22px;
+  border: 1px solid rgba(255, 125, 157, 0.38);
+  border-radius: 20px;
+  color: #23242b;
+  background:
+    radial-gradient(circle at 100% 0, rgba(185, 239, 255, 0.72), transparent 42%),
+    radial-gradient(circle at 0 100%, rgba(255, 216, 239, 0.86), transparent 46%),
+    rgba(255, 255, 255, 0.97);
+  box-shadow: 0 20px 60px rgba(37, 42, 58, 0.26);
+  transform: translate(-50%, -50%);
+}
+
+.embedded-browser-notice[hidden] {
+  display: none;
+}
+
+.embedded-browser-notice-kicker {
+  margin: 0 0 6px;
+  color: #cb5d88;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+}
+
+.embedded-browser-notice h2 {
+  margin: 0;
+  font-size: clamp(1.18rem, 3vw, 1.45rem);
+}
+
+.embedded-browser-notice-copy,
+.embedded-browser-notice-instruction {
+  margin: 12px 0 0;
+  color: #596070;
+  font-size: 0.92rem;
+  line-height: 1.65;
+}
+
+.embedded-browser-notice-instruction {
+  padding: 10px 12px;
+  border-radius: 12px;
+  color: #35405a;
+  background: rgba(255, 255, 255, 0.68);
+}
+
+.embedded-browser-notice-dismiss {
+  width: 100%;
+  min-height: 42px;
+  margin-top: 18px;
+  border: 0;
+  border-radius: 12px;
+  color: #fff;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+  background: linear-gradient(135deg, #ff8a21, #ff5da8);
+}
+
+.embedded-browser-notice-dismiss:focus-visible {
+  outline: 3px solid rgba(104, 217, 255, 0.9);
+  outline-offset: 3px;
+}
+
+@media (max-width: 760px) {
+  .embedded-browser-notice {
+    width: calc(100vw - 24px);
+    padding: 18px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .embedded-browser-notice {
+    transition: none;
+  }
+}

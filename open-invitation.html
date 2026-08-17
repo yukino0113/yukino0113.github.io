@@ -8,11 +8,12 @@
     <link rel="icon" href="data:," />
     <link rel="preload" as="image" href="assets/images/invitation/2.svg" />
     <link rel="preload" as="image" href="assets/images/invitation/1-open.svg" />
-    <link rel="stylesheet" href="assets/css/maimai-invitation.css?v=android-touch-fix-v5-overlap-tuned" />
+    <link rel="stylesheet" href="assets/css/maimai-invitation.css?v=mobile-pan-bounds-v1" />
     <link rel="stylesheet" href="assets/css/open-invitation-inner.css?v=inner-v2" />
     <link rel="stylesheet" href="assets/css/open-invitation-achievements.css?v=achievements-v1" />
     <link rel="stylesheet" href="assets/css/open-invitation-achievement-list.css?v=list-v1" />
     <link rel="stylesheet" href="assets/css/open-invitation-hotspots.css?v=eevee-hotspots-v4-center-two" />
+    <link rel="stylesheet" href="assets/css/open-invitation-embedded-browser.css?v=embedded-browser-v1" />
   </head>
   <body>
     <main class="invitation-app" aria-label="Interactive MAIMAI wedding invitation">
@@ -240,7 +241,28 @@
       aria-atomic="false"
     ></div>
 
-    <script defer src="assets/js/open-invitation.js?v=achievements-v10-release-edge"></script>
-    <script defer src="assets/js/maimai-invitation.js?v=android-touch-fix-v7-back-open-release"></script>
+    <aside
+      class="embedded-browser-notice"
+      id="embedded-browser-notice"
+      role="dialog"
+      aria-labelledby="embedded-browser-notice-title"
+      hidden
+    >
+      <p class="embedded-browser-notice-kicker">建議使用一般瀏覽器</p>
+      <h2 id="embedded-browser-notice-title">讓喜帖完整呈現</h2>
+      <p class="embedded-browser-notice-copy">
+        目前正使用 App 的內嵌瀏覽器，3D 旋轉、拖曳與縮放效果可能較不穩定。
+      </p>
+      <p class="embedded-browser-notice-instruction">
+        請點擊右上角的「⋯」，並選擇「在瀏覽器中開啟」。
+      </p>
+      <button class="embedded-browser-notice-dismiss" type="button" id="dismiss-embedded-browser-notice">
+        繼續使用內嵌瀏覽器
+      </button>
+    </aside>
+
+    <script defer src="assets/js/open-invitation.js?v=achievements-v14-eevee-hint"></script>
+    <script defer src="assets/js/embedded-browser-notice.js?v=embedded-browser-v1"></script>
+    <script defer src="assets/js/maimai-invitation.js?v=mobile-pan-bounds-v1"></script>
   </body>
 </html>

@@ -38,6 +38,7 @@ button {
   padding: clamp(16px, 4vw, 44px);
   isolation: isolate;
   touch-action: none;
+  overscroll-behavior: none;
   background:
     radial-gradient(circle at 16% 18%, rgba(255, 216, 239, 0.9), transparent 28%),
     radial-gradient(circle at 84% 14%, rgba(185, 239, 255, 0.9), transparent 26%),
@@ -458,7 +459,8 @@ button {
 
 @media (max-width: 760px) {
   body {
-    overflow: auto;
+    overflow: hidden;
+    overscroll-behavior: none;
   }
 
   .invitation-app {

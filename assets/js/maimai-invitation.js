@@ -345,10 +345,36 @@ function shouldPreferCollapsedHud() {
 }
 
 function clampViewToScreen() {
-  const maxX = globalThis.innerWidth * 0.9 * state.viewScale;
-  const maxY = globalThis.innerHeight * 0.7 * state.viewScale;
-  state.viewX = clamp(state.viewX, -maxX, maxX);
-  state.viewY = clamp(state.viewY, -maxY, maxY);
+  const viewportWidth = globalThis.innerWidth;
+  const viewportHeight = globalThis.innerHeight;
+  const edgePadding = Math.min(24, Math.max(12, Math.min(viewportWidth, viewportHeight) * 0.04));
+  const appliedViewX = Number.parseFloat(sceneShell.style.getPropertyValue("--view-x")) || 0;
+  const appliedViewY = Number.parseFloat(sceneShell.style.getPropertyValue("--view-y")) || 0;
+  const shellRect = sceneShell.getBoundingClientRect();
+  const sceneCenterX = shellRect.left + shellRect.width / 2 - appliedViewX;
+  const sceneCenterY = shellRect.top + shellRect.height / 2 - appliedViewY;
+  const scaledSceneWidth = scene.offsetWidth * state.viewScale;
+  const scaledSceneHeight = scene.offsetHeight * state.viewScale;
+
+  const getBounds = (center, size, viewportSize) => {
+    const halfSize = size / 2;
+    if (size <= viewportSize - edgePadding * 2) {
+      return {
+        min: edgePadding - center + halfSize,
+        max: viewportSize - edgePadding - center - halfSize
+      };
+    }
+
+    return {
+      min: edgePadding - center - halfSize,
+      max: viewportSize - edgePadding - center + halfSize
+    };
+  };
+
+  const xBounds = getBounds(sceneCenterX, scaledSceneWidth, viewportWidth);
+  const yBounds = getBounds(sceneCenterY, scaledSceneHeight, viewportHeight);
+  state.viewX = clamp(state.viewX, xBounds.min, xBounds.max);
+  state.viewY = clamp(state.viewY, yBounds.min, yBounds.max);
 }
 
 function getGesturePoints() {
@@ -414,7 +440,10 @@ function createSpark() {
 }
 
 function drawSparks(time = 0) {
-  ctx.clearRect(0, 0, globalThis.innerWidth, globalThis.innerHeight);
+  ctx.save();
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.restore();
 
   for (const spark of sparks) {
     spark.y -= spark.speed;

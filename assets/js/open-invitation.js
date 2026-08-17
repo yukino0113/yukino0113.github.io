@@ -1,6 +1,9 @@
 const ACHIEVEMENT_STORAGE_KEY = "open-invitation-achievements-v1";
 const CYCLE_WINDOW_MS = 5000;
+const OPEN_CLOSE_ACTIONS_REQUIRED = 10;
+const COMPLETED_CYCLES_REQUIRED = OPEN_CLOSE_ACTIONS_REQUIRED / 2;
 const EEVEE_COLLECTION_SIZE = 5;
+const HOTSPOT_DRAG_THRESHOLD_PX = 8;
 
 const ACHIEVEMENTS = Object.freeze({
   "page-loaded": {
@@ -46,7 +49,7 @@ const ACHIEVEMENTS = Object.freeze({
   "eevee-all": {
     title: "伊布圖鑑完成",
     description: "五隻，一隻都沒放過。",
-    hint: "伊布：布!!!"
+    hint: "看起來所有伊布都想要找你玩呢"
   },
   "eevee-10-in-5s": {
     title: "摸夠了沒？",
@@ -167,7 +170,7 @@ class AchievementEngine {
     );
     this.cycleTimestamps.push(now);
 
-    if (this.cycleTimestamps.length >= 10) {
+    if (this.cycleTimestamps.length >= COMPLETED_CYCLES_REQUIRED) {
       this.unlock("open-close-10-in-5s");
     }
   }
@@ -292,7 +295,7 @@ class AchievementEngine {
 
     if (
       id !== "page-and-back" &&
-      this.unlocked.has("page-loaded") &&
+      this.unlocked.has("invitation-opened") &&
       this.unlocked.has("back-facing")
     ) {
       this.unlock("page-and-back");
@@ -400,9 +403,52 @@ globalThis.addEventListener("invitation:rotation-ended", (event) => {
   achievementEngine.handleRotationEnded(event.detail || {});
 });
 
+const hotspotPointerStates = new Map();
+const suppressedHotspotClicks = new WeakSet();
+
 document.querySelectorAll("[data-hotspot-kind]").forEach((hotspot) => {
+  hotspot.addEventListener("pointerdown", (event) => {
+    hotspotPointerStates.set(event.pointerId, {
+      hotspot,
+      startX: event.clientX,
+      startY: event.clientY,
+      moved: false
+    });
+  });
+
+  hotspot.addEventListener("pointermove", (event) => {
+    const pointerState = hotspotPointerStates.get(event.pointerId);
+    if (!pointerState || pointerState.hotspot !== hotspot) {
+      return;
+    }
+
+    pointerState.moved =
+      Math.hypot(event.clientX - pointerState.startX, event.clientY - pointerState.startY) >
+      HOTSPOT_DRAG_THRESHOLD_PX;
+  });
+
+  hotspot.addEventListener("pointerup", (event) => {
+    const pointerState = hotspotPointerStates.get(event.pointerId);
+    if (pointerState?.moved) {
+      suppressedHotspotClicks.add(hotspot);
+    }
+    hotspotPointerStates.delete(event.pointerId);
+  });
+
+  hotspot.addEventListener("pointercancel", (event) => {
+    const pointerState = hotspotPointerStates.get(event.pointerId);
+    if (pointerState?.moved) {
+      suppressedHotspotClicks.add(hotspot);
+    }
+    hotspotPointerStates.delete(event.pointerId);
+  });
+
   hotspot.addEventListener("click", (event) => {
     event.stopPropagation();
+    if (suppressedHotspotClicks.delete(hotspot)) {
+      return;
+    }
+
     globalThis.dispatchEvent(
       new CustomEvent("invitation:hotspot-clicked", {
         detail: {
