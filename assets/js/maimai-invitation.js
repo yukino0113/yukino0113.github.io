@@ -76,9 +76,12 @@ app.addEventListener("pointerdown", (event) => {
     return;
   }
 
-  stopBrowserGesture(event);
+  const hotspot = event.target.closest("[data-hotspot-kind]");
+  if (!hotspot) {
+    stopBrowserGesture(event);
+  }
   state.activePointers.set(event.pointerId, pointerPoint(event));
-  event.currentTarget.setPointerCapture(event.pointerId);
+  (hotspot ?? event.currentTarget).setPointerCapture(event.pointerId);
 
   if (state.activePointers.size >= 2) {
     beginGesture();

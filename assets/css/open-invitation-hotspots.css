@@ -122,10 +122,17 @@
   visibility: visible;
 }
 
-.outer-eevee-back-center {
-  left: 43%;
+.outer-eevee-back-center-brown {
+  left: 48%;
   top: 4%;
-  width: 30%;
+  width: 22%;
+  height: 23%;
+}
+
+.outer-eevee-back-center-glaceon {
+  left: 68%;
+  top: 4%;
+  width: 20%;
   height: 23%;
 }
 
@@ -146,10 +153,17 @@
   height: 28%;
 }
 
-.outer-eevee-back-center-open {
-  left: 43%;
+.outer-eevee-back-center-open-brown {
+  left: 48%;
   top: 4%;
-  width: 18%;
+  width: 10%;
+  height: 22%;
+}
+
+.outer-eevee-back-center-open-glaceon {
+  left: 59%;
+  top: 4%;
+  width: 14%;
   height: 22%;
 }
 

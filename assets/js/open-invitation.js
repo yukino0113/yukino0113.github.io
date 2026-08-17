@@ -1,5 +1,6 @@
 const ACHIEVEMENT_STORAGE_KEY = "open-invitation-achievements-v1";
 const CYCLE_WINDOW_MS = 5000;
+const EEVEE_COLLECTION_SIZE = 5;
 
 const ACHIEVEMENTS = Object.freeze({
   "page-loaded": {
@@ -44,7 +45,7 @@ const ACHIEVEMENTS = Object.freeze({
   },
   "eevee-all": {
     title: "伊布圖鑑完成",
-    description: "三隻，一隻都沒放過。",
+    description: "五隻，一隻都沒放過。",
     hint: "伊布：布!!!"
   },
   "eevee-10-in-5s": {
@@ -141,7 +142,7 @@ class AchievementEngine {
     this.hasOpenedSinceLastClose = false;
     this.cycleTimestamps = [];
     this.eeveeClickTimestamps = [];
-    this.outerEeveeIds = new Set();
+    this.eeveeIds = new Set();
     this.wasBackFacing = false;
     this.wasEdgeOn = false;
   }
@@ -201,9 +202,9 @@ class AchievementEngine {
 
     this.unlock("eevee-any");
 
-    if (detail.scope === "outer" && detail.kind === "eevee" && detail.id) {
-      this.outerEeveeIds.add(detail.id);
-      if (this.outerEeveeIds.size >= 3) {
+    if (detail.kind === "eevee" && detail.id) {
+      this.eeveeIds.add(detail.id);
+      if (this.eeveeIds.size >= EEVEE_COLLECTION_SIZE) {
         this.unlock("eevee-all");
       }
     }
@@ -314,7 +315,16 @@ class AchievementEngine {
   loadUnlocked() {
     try {
       const saved = JSON.parse(localStorage.getItem(ACHIEVEMENT_STORAGE_KEY) || "[]");
-      return new Set(Array.isArray(saved) ? saved : []);
+      const unlocked = new Set(Array.isArray(saved) ? saved : []);
+      const removedOldCollection = unlocked.delete("eevee-all");
+      const removedOldCompletion = unlocked.delete("all-achievements");
+      const hadOldCollectionAchievements = removedOldCollection || removedOldCompletion;
+
+      if (hadOldCollectionAchievements) {
+        localStorage.setItem(ACHIEVEMENT_STORAGE_KEY, JSON.stringify([...unlocked]));
+      }
+
+      return unlocked;
     } catch {
       return new Set();
     }
