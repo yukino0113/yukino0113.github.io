@@ -97,14 +97,14 @@ app.addEventListener("pointerdown", (event) => {
     event.clientY >= sceneRect.top &&
     event.clientY <= sceneRect.bottom;
   const startsOnPullZone = startsInScene && (xRatio < 0.48 || xRatio > 0.52);
-  const canOpenFromHere = startsOnPullZone && !isBackFacing();
+  const canOpenFromHere = startsOnPullZone;
   state.pointerId = event.pointerId;
   state.startX = event.clientX;
   state.startY = event.clientY;
   state.startYaw = state.yaw;
   state.startPitch = state.pitch;
   state.startOpen = state.open;
-  state.mode = door && !isBackFacing() ? "door" : canOpenFromHere ? "door" : "rotate";
+  state.mode = door || canOpenFromHere ? "door" : "rotate";
   machine.classList.add("is-dragging");
   scene.classList.toggle("is-rotating", state.mode === "rotate");
 });
@@ -148,9 +148,6 @@ app.addEventListener("pointerup", endPointer);
 app.addEventListener("pointercancel", endPointer);
 
 toggleOpenButton.addEventListener("click", () => {
-  if (isBackFacing()) {
-    return;
-  }
   commitOpenState(state.open > 0.5 ? 0 : 1);
 });
 
@@ -208,6 +205,13 @@ function endPointer(event) {
   state.mode = null;
   machine.classList.remove("is-dragging");
   scene.classList.remove("is-rotating");
+
+  if (event.type === "pointerup") {
+    emitInvitationEvent("invitation:rotation-ended", {
+      yaw: state.yaw,
+      isEdgeOn: isEdgeOn()
+    });
+  }
 }
 
 function applyMachineState() {
@@ -221,6 +225,7 @@ function applyMachineState() {
   closedFrontCover.style.opacity = `${1 - state.open}`;
   closedFrontCover.style.visibility = state.open > 0.02 ? "hidden" : "visible";
   machine.classList.toggle("is-back-facing", isBackFacing());
+  machine.classList.toggle("is-side-facing", isSideFacing());
   toggleOpenButton.textContent = state.open > 0.5 ? "關閉" : "打開";
   machine.classList.toggle("is-open", state.open > 0.02);
   updateLayout();
@@ -275,12 +280,17 @@ function updateGesture() {
 }
 
 function isBackFacing() {
-  return Math.abs(normalizeDegrees(state.yaw)) > 90;
+  return Math.abs(normalizeDegrees(state.yaw)) > 91;
 }
 
 function isEdgeOn() {
   const absoluteYaw = Math.abs(normalizeDegrees(state.yaw));
   return Math.abs(absoluteYaw - 90) <= 10;
+}
+
+function isSideFacing() {
+  const absoluteYaw = Math.abs(normalizeDegrees(state.yaw));
+  return absoluteYaw >= 90.5 && absoluteYaw <= 91.5;
 }
 
 function emitInvitationEvent(name, detail = {}) {

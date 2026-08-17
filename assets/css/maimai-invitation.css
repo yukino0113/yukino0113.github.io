@@ -148,6 +148,10 @@ button {
   transition: opacity 260ms ease;
 }
 
+.machine.is-side-facing.is-open .center-inside {
+  opacity: 0;
+}
+
 .center-back-closed {
   left: 25%;
   z-index: 3;
@@ -222,13 +226,13 @@ button {
 .pull-left {
   left: 0;
   transform-origin: right center;
-  transform: translateX(calc(var(--left-slide) + var(--seam-overlap, 0px))) translateZ(12px);
+  transform: translateX(calc(var(--left-slide) + var(--seam-overlap, 0px))) translateZ(3px);
 }
 
 .pull-right {
   right: 0;
   transform-origin: left center;
-  transform: translateX(calc(var(--right-slide) - var(--seam-overlap, 0px))) translateZ(12px);
+  transform: translateX(calc(var(--right-slide) - var(--seam-overlap, 0px))) translateZ(3px);
 }
 
 .pull-face {

@@ -144,7 +144,6 @@ class AchievementEngine {
     this.eeveeClickTimestamps = [];
     this.eeveeIds = new Set();
     this.wasBackFacing = false;
-    this.wasEdgeOn = false;
   }
 
   handlePageLoaded() {
@@ -175,18 +174,18 @@ class AchievementEngine {
 
   handleStateChanged(detail) {
     const isBackFacing = Boolean(detail.isBackFacing);
-    const isEdgeOn = Boolean(detail.isEdgeOn);
 
     if (isBackFacing && !this.wasBackFacing) {
       this.unlock("back-facing");
     }
 
-    if (isEdgeOn && !this.wasEdgeOn) {
+    this.wasBackFacing = isBackFacing;
+  }
+
+  handleRotationEnded(detail) {
+    if (detail.isEdgeOn) {
       this.unlock("edge-on");
     }
-
-    this.wasBackFacing = isBackFacing;
-    this.wasEdgeOn = isEdgeOn;
   }
 
   handleHotspotClicked(detail) {
@@ -395,6 +394,10 @@ globalThis.addEventListener("invitation:closed", () => {
 
 globalThis.addEventListener("invitation:state-changed", (event) => {
   achievementEngine.handleStateChanged(event.detail || {});
+});
+
+globalThis.addEventListener("invitation:rotation-ended", (event) => {
+  achievementEngine.handleRotationEnded(event.detail || {});
 });
 
 document.querySelectorAll("[data-hotspot-kind]").forEach((hotspot) => {
